@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCS Monthly Briefing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            width: 100vw;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('desiredresults/assets/ppt/media/image9.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #28295d;
+            opacity: 0.8;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 5%;
+        }
+
+        .title {
+            font-size: 74px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 36px;
+            font-weight: 400;
+            color: white;
+            text-align: left;
+            opacity: 0.9;
+        }
+
+        .brand-logo {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            z-index: 20;
+            width: 150px;
+            height: 150px;
+        }
+
+        .brand-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Agenda Page Styles */
+        .agenda-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+        }
+
+        .agenda-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('desiredresults/assets/ppt/media/image7.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .agenda-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #28295d;
+            opacity: 0.8;
+        }
+
+        .agenda-left {
+            position: relative;
+            z-index: 10;
+            width: 40%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+        }
+
+        .agenda-title {
+            font-size: 72px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+            line-height: 1.1;
+            margin-bottom: 40px;
+        }
+
+        .agenda-logo {
+            position: absolute;
+            bottom: 60px;
+            left: 60px;
+            z-index: 20;
+            width: 120px;
+            height: 120px;
+        }
+
+        .agenda-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .agenda-right {
+            position: relative;
+            z-index: 10;
+            width: 60%;
+            height: 100%;
+            background-color: rgba(245, 245, 245, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 60px;
+        }
+
+        .agenda-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .agenda-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 35px;
+            font-size: 28px;
+            color: #28295d;
+            font-weight: 400;
+        }
+
+        .agenda-checkmark {
+            width: 24px;
+            height: 24px;
+            margin-right: 20px;
+            color: #7cb342;
+            font-size: 20px;
+        }
+
+        .agenda-item.nested {
+            margin-left: 44px;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            font-size: 24px;
+            color: #28295d;
+            font-weight: 400;
+        }
+
+        /* Content Slide Styles */
+        .content-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .content-header {
+            background-color: #28295d;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+        }
+
+        .content-logo {
+            max-width: 300px;
+            max-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .content-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .content-body {
+            flex: 1;
+            padding: 80px 80px 120px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .content-paragraph {
+            font-size: 28px;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .content-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            color: #28295d;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+    <!-- Title Page -->
+    <div class="slide">
+        <div class="background-image"></div>
+        <div class="overlay"></div>
+
+        <div class="content">
+            <h1 class="title">BCS Monthly Briefing</h1>
+            <p class="subtitle">Subtitle</p>
+        </div>
+
+        <div class="brand-logo">
+            <img src="desiredresults/assets/ppt/media/image8.png" alt="Brand Logo">
+        </div>
+    </div>
+
+    <!-- Agenda Page -->
+    <div class="agenda-slide">
+        <div class="agenda-background"></div>
+        <div class="agenda-overlay"></div>
+
+        <div class="agenda-left">
+            <h1 class="agenda-title">AGENDA</h1>
+
+            <div class="agenda-logo">
+                <img src="desiredresults/assets/ppt/media/image8.png" alt="BCS Logo">
+            </div>
+        </div>
+
+        <div class="agenda-right">
+            <ul class="agenda-items">
+                <li class="agenda-item">
+                    <span class="agenda-checkmark">✓</span>
+                    <span>FMLA Overview</span>
+                </li>
+                <li class="agenda-item">
+                    <span class="agenda-checkmark">✓</span>
+                    <span>Overview Specifics</span>
+                </li>
+                <li class="agenda-item nested">
+                    <span class="agenda-checkmark">✓</span>
+                    <span>Overview</span>
+                </li>
+                <li class="agenda-item">
+                    <span class="agenda-checkmark">✓</span>
+                    <span>FMLA Requires Benefits to be maintained</span>
+                </li>
+                <li class="agenda-item">
+                    <span class="agenda-checkmark">✓</span>
+                    <span>Payment of premiums on unpaid leave</span>
+                </li>
+                <li class="agenda-item">
+                    <span class="agenda-checkmark">✓</span>
+                    <span>COBRA upon exhaustion of FMLA</span>
+                </li>
+                <li class="agenda-item">
+                    <span class="agenda-checkmark">✓</span>
+                    <span>FMLA Notices and Disclosures</span>
+                </li>
+                <li class="agenda-item">
+                    <span class="agenda-checkmark">✓</span>
+                    <span>Best Practices for Employees</span>
+                </li>
+                <li class="agenda-item">
+                    <span class="agenda-checkmark">✓</span>
+                    <span>Thank You + Q&A</span>
+                </li>
+            </ul>
+
+            <div class="page-number">2</div>
+        </div>
+    </div>
+
+    <!-- Content Slide -->
+    <div class="content-slide">
+        <div class="content-header">
+            <h1 class="content-title">CONTENT SLIDE</h1>
+            <div class="content-logo">
+                <img src="desiredresults/assets/ppt/media/image8.png" alt="BCS Logo">
+            </div>
+        </div>
+
+        <div class="content-body">
+            <p class="content-paragraph">
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+            <p class="content-paragraph">
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+            <p class="content-paragraph">
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+            <p class="content-paragraph">
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+        </div>
+
+        <div class="content-page-number">3</div>
+    </div>
+</body>
+</html>
