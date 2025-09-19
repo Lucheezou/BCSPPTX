@@ -247,7 +247,10 @@
         <div class="result" id="result">
             <div class="result-header">Presentation Ready</div>
             <div class="result-actions">
-                <button class="download-btn" id="pptBtn" onclick="convertToPpt()" style="background-color: #ff6d00; width: 100%;">
+                <button class="download-btn" id="previewBtn" onclick="previewHtml()" style="background-color: #28295d; width: 48%; margin-right: 4%;">
+                    👁️ Preview HTML
+                </button>
+                <button class="download-btn" id="pptBtn" onclick="convertToPpt()" style="background-color: #ff6d00; width: 48%;">
                     📊 Download PowerPoint
                 </button>
             </div>
@@ -350,6 +353,17 @@
             }
         });
 
+        // Preview HTML function
+        function previewHtml() {
+            if (!presentationId) {
+                alert('No presentation content available');
+                return;
+            }
+
+            // Open the preview URL in a new tab
+            const previewUrl = `/previews/presentation_${presentationId}.html`;
+            window.open(previewUrl, '_blank');
+        }
 
         // Convert to PowerPoint function
         async function convertToPpt() {

@@ -271,9 +271,852 @@
             color: #28295d;
             font-weight: 400;
         }
+
+        /* Transition Slide Styles */
+        .transition-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transition-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('desiredresults/assets/ppt/media/image1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .transition-content {
+            position: relative;
+            z-index: 10;
+            width: 60%;
+            height: 60%;
+            background-color: #28295d;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-left: -30%;
+            padding-left: 60px;
+        }
+
+        .transition-title {
+            font-size: 72px;
+            font-weight: bold;
+            color: white;
+            text-align: left;
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .transition-logo {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 20;
+            width: 280px;
+            height: 120px;
+        }
+
+        .transition-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .transition-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            font-size: 28px;
+            color: white;
+            font-weight: 400;
+        }
+
+        /* Transition Slide Alt Styles */
+        .transition-alt-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transition-alt-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('desiredresults/assets/ppt/media/image5.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .transition-alt-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #28295d;
+            opacity: 0.8;
+        }
+
+        .transition-alt-content {
+            position: relative;
+            z-index: 10;
+            width: 60%;
+            height: 40%;
+            border: 4px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transition-alt-title {
+            font-size: 72px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .transition-alt-logo {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 20;
+            width: 280px;
+            height: 120px;
+        }
+
+        .transition-alt-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .transition-alt-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            font-size: 28px;
+            color: white;
+            font-weight: 400;
+        }
+
+        /* Statistics Slide Styles */
+        .statistics-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .statistics-header {
+            background-color: #28295d;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .statistics-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+        }
+
+        .statistics-logo {
+            max-width: 300px;
+            max-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .statistics-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .statistics-body {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            gap: 60px;
+        }
+
+        .statistics-chart-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .statistics-chart {
+            display: flex;
+            align-items: end;
+            justify-content: space-around;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        .chart-bar {
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bar-stack {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .bar-segment-purple {
+            background-color: #28295d;
+            margin-bottom: 2px;
+        }
+
+        .bar-segment-teal {
+            background-color: #a8d5d5;
+        }
+
+        .chart-label {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .chart-y-axis {
+            position: absolute;
+            left: 20px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .statistics-panel {
+            width: 400px;
+            background-color: #28295d;
+            border-radius: 12px;
+            padding: 40px;
+            color: white;
+        }
+
+        .statistics-panel-title {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .statistics-description {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .statistics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .statistic-item {
+            text-align: center;
+        }
+
+        .statistic-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .statistic-label {
+            font-size: 14px;
+            opacity: 0.8;
+            line-height: 1.3;
+        }
+
+        .statistics-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            color: #28295d;
+            font-weight: 400;
+        }
+
+        /* Checklist Slide Styles */
+        .checklist-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #28295d;
+        }
+
+        .checklist-header {
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .checklist-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+        }
+
+        .checklist-logo {
+            max-width: 300px;
+            max-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .checklist-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .checklist-body {
+            flex: 1;
+            display: flex;
+        }
+
+        .checklist-content {
+            flex: 1;
+            padding: 60px;
+            color: white;
+        }
+
+        .checklist-content-heading {
+            font-size: 64px;
+            font-weight: 300;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .checklist-item {
+            margin-bottom: 30px;
+            font-size: 20px;
+            line-height: 1.6;
+            color: white;
+        }
+
+        .checklist-panel {
+            width: 400px;
+            background-color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checklist-panel-content {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .checklist-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .checklist-list-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .checklist-checkbox {
+            width: 24px;
+            height: 24px;
+            margin-right: 20px;
+            color: #7cb342;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .checklist-checkbox.checked::before {
+            content: '✓';
+        }
+
+        .checklist-checkbox-square {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #7cb342;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .checklist-subitem {
+            margin-left: 30px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .checklist-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            color: white;
+            font-weight: 400;
+        }
+
+        /* Thank You Slide Styles */
+        .thankyou-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .thankyou-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('desiredresults/assets/ppt/media/image10.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .thankyou-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #28295d;
+            opacity: 0.85;
+        }
+
+        .thankyou-content {
+            position: relative;
+            z-index: 10;
+            padding: 0 80px;
+            max-width: 60%;
+        }
+
+        .thankyou-title {
+            font-size: 64px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .thankyou-subtitle {
+            font-size: 64px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+            line-height: 1.1;
+        }
+
+        .thankyou-disclaimer {
+            position: absolute;
+            bottom: 80px;
+            left: 80px;
+            right: 200px;
+            font-size: 12px;
+            color: white;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .thankyou-logo {
+            position: absolute;
+            bottom: 60px;
+            right: 80px;
+            z-index: 20;
+            width: 120px;
+            height: 120px;
+        }
+
+        .thankyou-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .thankyou-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            font-size: 28px;
+            color: white;
+            font-weight: 400;
+        }
+
+        /* Component Slide Styles */
+        .component-container {
+            width: 100%;
+            height: 100vh;
+            padding: 40px;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .component-slide {
+            width: 18%;
+            height: 70vh;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .component-header {
+            height: 30%;
+            background-color: #28295d;
+        }
+
+        .component-body {
+            height: 70%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 300;
+            color: #333;
+        }
+
+        .component-body-gray {
+            background-color: #e8e8e8;
+        }
+
+        .component-body-teal {
+            background-color: #a8d5d5;
+        }
+
+        .component-body-white {
+            background-color: #ffffff;
+        }
+
+        .component-body-dark {
+            background-color: #666666;
+            color: white;
+        }
+
+        /* Table Slide Styles */
+        .table-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .table-header {
+            background-color: #28295d;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+        }
+
+        .table-logo {
+            max-width: 300px;
+            max-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .table-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .table-body {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .data-table th {
+            background-color: #28295d;
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            font-weight: 400;
+            font-size: 24px;
+            border: 2px solid white;
+        }
+
+        .data-table td {
+            padding: 18px 15px;
+            text-align: left;
+            border: 2px solid white;
+            color: #333;
+            font-weight: 400;
+        }
+
+        .data-table tr:nth-child(even) td {
+            background-color: #a8d5d5;
+        }
+
+        .data-table tr:nth-child(odd) td {
+            background-color: #e8e8e8;
+        }
+
+        .table-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            color: #28295d;
+            font-weight: 400;
+        }
+
+        /* Component Content Slide Styles */
+        .component-content-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .component-content-header {
+            background-color: #28295d;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .component-content-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+        }
+
+        .component-content-logo {
+            max-width: 300px;
+            max-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .component-content-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .component-content-body {
+            flex: 1;
+            padding: 80px 80px 120px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .component-content-paragraph {
+            font-size: 28px;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .component-content-body-gray {
+            background-color: #e8e8e8;
+        }
+
+        .component-content-body-teal {
+            background-color: #a8d5d5;
+        }
+
+        .component-content-body-white {
+            background-color: #ffffff;
+        }
+
+        .component-content-body-dark {
+            background-color: #666666;
+        }
+
+        .component-content-body-dark .component-content-paragraph {
+            color: white;
+        }
+
+        .component-content-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            color: #28295d;
+            font-weight: 400;
+        }
+
+        /* Text Box Component Styles */
+        .textbox-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .textbox-header {
+            background-color: #28295d;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .textbox-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+        }
+
+        .textbox-logo {
+            max-width: 300px;
+            max-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .textbox-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .textbox-body {
+            flex: 1;
+            padding: 40px 60px 80px 60px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .textbox-content {
+            border-radius: 8px;
+            overflow: hidden;
+            flex: 1;
+            height: 70vh;
+        }
+
+        .textbox-internal-header {
+            padding: 20px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .textbox-internal-header-blue {
+            background-color: #28295d;
+        }
+
+        .textbox-internal-header-light-blue {
+            background-color: #7c8db8;
+        }
+
+        .textbox-content-body {
+            padding: 30px;
+        }
+
+        .textbox-content-gray {
+            background-color: #e8e8e8;
+        }
+
+        .textbox-content-teal {
+            background-color: #a8d5d5;
+        }
+
+        .textbox-text {
+            font-size: 24px;
+            color: #333;
+            line-height: 1.6;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .textbox-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            color: #28295d;
+            font-weight: 400;
+        }
     </style>
 </head>
 <body>
+
     <!-- Title Page -->
     <div class="slide">
         <div class="background-image"></div>
@@ -346,6 +1189,22 @@
         </div>
     </div>
 
+
+    <!-- Transition Slide -->
+    <div class="transition-slide">
+        <div class="transition-background"></div>
+
+        <div class="transition-content">
+            <h1 class="transition-title">TRANSITION<br>SLIDE</h1>
+        </div>
+
+        <div class="transition-logo">
+            <img src="desiredresults/assets/ppt/media/image8.png" alt="BCS Logo">
+        </div>
+
+        <div class="transition-page-number">3</div>
+    </div>
+
     <!-- Content Slide -->
     <div class="content-slide">
         <div class="content-header">
@@ -357,20 +1216,348 @@
 
         <div class="content-body">
             <p class="content-paragraph">
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
             </p>
             <p class="content-paragraph">
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             </p>
             <p class="content-paragraph">
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </p>
-            <p class="content-paragraph">
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
             </p>
         </div>
 
-        <div class="content-page-number">3</div>
+        <div class="content-page-number">4</div>
+    </div>
+
+    <!-- COMPONENT: Table Layout -->
+    <div class="table-slide">
+        <div class="table-header">
+            <h1 class="table-title">COMPONENT: TABLE LAYOUT</h1>
+            <div class="table-logo">
+                <img src="desiredresults/assets/ppt/media/image8.png" alt="BCS Logo">
+            </div>
+        </div>
+
+        <div class="table-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>HEADER 1</th>
+                        <th>HEADER 2</th>
+                        <th>HEADER 3</th>
+                        <th>HEADER 4</th>
+                        <th>HEADER 5</th>
+                        <th>HEADER 6</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                    </tr>
+                    <tr>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                    </tr>
+                    <tr>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                    </tr>
+                    <tr>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                        <td>Data cell content</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-page-number">5</div>
+    </div>
+
+    <!-- COMPONENT: Transition -->
+    <div class="transition-slide">
+        <div class="transition-background"></div>
+
+        <div class="transition-content">
+            <h1 class="transition-title">COMPONENT:<br>TRANSITION</h1>
+        </div>
+
+        <div class="transition-logo">
+            <img src="desiredresults/assets/ppt/media/image8.png" alt="BCS Logo">
+        </div>
+
+        <div class="transition-page-number">6</div>
+    </div>
+
+    <!-- COMPONENT: Gray Text Box -->
+    <div class="textbox-slide">
+        <div class="textbox-header">
+            <h1 class="textbox-title">COMPONENT: GRAY TEXT BOX</h1>
+            <div class="textbox-logo">
+                <img src="desiredresults/assets/ppt/media/image8.png" alt="BCS Logo">
+            </div>
+        </div>
+
+        <div class="textbox-body">
+            <div class="textbox-content">
+                <div class="textbox-internal-header textbox-internal-header-blue">
+                    Header Text
+                </div>
+                <div class="textbox-content-body textbox-content-gray">
+                    <p class="textbox-text">
+                        This is a gray text box component with internal blue header. It can be used to highlight important information, quotes, or key points that need to stand out from regular content.
+                    </p>
+                </div>
+            </div>
+            <div class="textbox-content">
+                <div class="textbox-internal-header textbox-internal-header-blue">
+                    Another Header
+                </div>
+                <div class="textbox-content-body textbox-content-gray">
+                    <p class="textbox-text">
+                        Multiple text boxes can be used on the same slide to organize different pieces of information. Each box has its own blue header section.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="textbox-page-number">7</div>
+    </div>
+
+    <!-- COMPONENT: Teal Text Box -->
+    <div class="textbox-slide">
+        <div class="textbox-header">
+            <h1 class="textbox-title">COMPONENT: TEAL TEXT BOX</h1>
+            <div class="textbox-logo">
+                <img src="desiredresults/assets/ppt/media/image8.png" alt="BCS Logo">
+            </div>
+        </div>
+
+        <div class="textbox-body">
+            <div class="textbox-content">
+                <div class="textbox-internal-header textbox-internal-header-light-blue">
+                    Header Text
+                </div>
+                <div class="textbox-content-body textbox-content-teal">
+                    <p class="textbox-text">
+                        This is a teal text box component with internal light blue header. The teal color provides vibrant emphasis and can be used for highlighting important compliance information.
+                    </p>
+                </div>
+            </div>
+            <div class="textbox-content">
+                <div class="textbox-internal-header textbox-internal-header-light-blue">
+                    Another Header
+                </div>
+                <div class="textbox-content-body textbox-content-teal">
+                    <p class="textbox-text">
+                        Teal text boxes are ideal for creating visual variety in presentations and can help break up content-heavy slides while maintaining professional appearance.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="textbox-page-number">8</div>
+    </div>
+
+    <!-- COMPONENT: Alternative Transition -->
+    <div class="transition-alt-slide">
+        <div class="transition-alt-background"></div>
+        <div class="transition-alt-overlay"></div>
+
+        <div class="transition-alt-content">
+            <h1 class="transition-alt-title">TRANSITION SLIDE</h1>
+        </div>
+
+        <div class="transition-alt-logo">
+            <img src="desiredresults/assets/ppt/media/image8.png" alt="BCS Logo">
+        </div>
+
+        <div class="transition-alt-page-number">9</div>
+    </div>
+
+    <!-- COMPONENT: Statistics -->
+    <div class="statistics-slide">
+        <div class="statistics-header">
+            <h1 class="statistics-title">COMPONENT: STATISTICS</h1>
+            <div class="statistics-logo">
+                <img src="desiredresults/assets/ppt/media/image8.png" alt="BCS Logo">
+            </div>
+        </div>
+
+        <div class="statistics-body">
+            <div class="statistics-chart-section">
+                <div class="chart-y-axis">
+                    <div>140</div>
+                    <div>120</div>
+                    <div>100</div>
+                    <div>80</div>
+                    <div>60</div>
+                    <div>40</div>
+                    <div>20</div>
+                    <div>0</div>
+                </div>
+                <div class="statistics-chart">
+                    <div class="chart-bar">
+                        <div class="bar-stack">
+                            <div class="bar-segment-teal" style="height: 15px;"></div>
+                            <div class="bar-segment-purple" style="height: 15px;"></div>
+                        </div>
+                        <div class="chart-label">2020</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar-stack">
+                            <div class="bar-segment-teal" style="height: 30px;"></div>
+                            <div class="bar-segment-purple" style="height: 18px;"></div>
+                        </div>
+                        <div class="chart-label">2021</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar-stack">
+                            <div class="bar-segment-teal" style="height: 25px;"></div>
+                            <div class="bar-segment-purple" style="height: 58px;"></div>
+                        </div>
+                        <div class="chart-label">2022</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar-stack">
+                            <div class="bar-segment-teal" style="height: 40px;"></div>
+                            <div class="bar-segment-purple" style="height: 45px;"></div>
+                        </div>
+                        <div class="chart-label">2023</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar-stack">
+                            <div class="bar-segment-teal" style="height: 40px;"></div>
+                            <div class="bar-segment-purple" style="height: 82px;"></div>
+                        </div>
+                        <div class="chart-label">2024</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="statistics-panel">
+                <h2 class="statistics-panel-title">Statistics</h2>
+                <p class="statistics-description">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec sagittis mauris, vitae vehicula urna. Curabitur ultrices urna sit amet magna ultrices ornare. Curabitur ligula.
+                </p>
+                <div class="statistics-grid">
+                    <div class="statistic-item">
+                        <div class="statistic-number">80%</div>
+                        <div class="statistic-label">Revenue Growth</div>
+                    </div>
+                    <div class="statistic-item">
+                        <div class="statistic-number">10%</div>
+                        <div class="statistic-label">Return on Investment</div>
+                    </div>
+                    <div class="statistic-item">
+                        <div class="statistic-number">20%</div>
+                        <div class="statistic-label">Customer Acquisition Cost</div>
+                    </div>
+                    <div class="statistic-item">
+                        <div class="statistic-number">75%</div>
+                        <div class="statistic-label">Customer Satisfaction</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="statistics-page-number">10</div>
+    </div>
+
+    <!-- COMPONENT: Checklist -->
+    <div class="checklist-slide">
+        <div class="checklist-header">
+            <h1 class="checklist-title">COMPONENT: CHECKLIST</h1>
+            <div class="checklist-logo">
+                <img src="desiredresults/assets/ppt/media/image8.png" alt="BCS Logo">
+            </div>
+        </div>
+
+        <div class="checklist-body">
+            <div class="checklist-content">
+                <h2 class="checklist-content-heading">Heading</h2>
+
+                <div class="checklist-item">
+                    1) Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec sagittis mauris, vitae vehicula urna. Curabitur ultrices urna sit amet magna ultrices ornare. Curabitur ligula.
+                </div>
+
+                <div class="checklist-item">
+                    2) Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec sagittis mauris, vitae vehicula urna. Curabitur ultrices urna sit amet magna ultrices ornare. Curabitur ligula.
+                </div>
+
+                <div class="checklist-item">
+                    3) Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec sagittis mauris, vitae vehicula urna. Curabitur ultrices urna sit amet magna ultrices ornare. Curabitur ligula.
+                </div>
+            </div>
+
+            <div class="checklist-panel">
+                <div class="checklist-panel-content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec sagittis mauris, vitae vehicula urna. Curabitur ultrices urna sit amet magna ultrices ornare. Curabitur ligula.
+                </div>
+
+                <ul class="checklist-list">
+                    <li class="checklist-list-item">
+                        <span class="checklist-checkbox-square"></span>
+                        Samples text 1
+                    </li>
+                    <li class="checklist-list-item checklist-subitem">
+                        <span class="checklist-checkbox checked"></span>
+                        Subtext 1
+                    </li>
+                    <li class="checklist-list-item checklist-subitem">
+                        <span class="checklist-checkbox checked"></span>
+                        Subtext 2
+                    </li>
+                    <li class="checklist-list-item">
+                        <span class="checklist-checkbox-square"></span>
+                        Sample text 2
+                    </li>
+                    <li class="checklist-list-item">
+                        <span class="checklist-checkbox-square"></span>
+                        Sample text 3
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="checklist-page-number">11</div>
+    </div>
+
+    <!-- COMPONENT: Thank You -->
+    <div class="thankyou-slide">
+        <div class="thankyou-background"></div>
+        <div class="thankyou-overlay"></div>
+
+        <div class="thankyou-content">
+            <h1 class="thankyou-title">THANK YOU!</h1>
+            <h2 class="thankyou-subtitle">Q&A</h2>
+        </div>
+
+        <div class="thankyou-disclaimer">
+            The material presented here is for general educational purposes only and is subject to change and law, rules, and regulations. It does not provide legal or tax opinions or advice.
+        </div>
+
+        <div class="thankyou-logo">
+            <img src="desiredresults/assets/ppt/media/image8.png" alt="BCS Logo">
+        </div>
+
+        <div class="thankyou-page-number">12</div>
     </div>
 </body>
 </html>
