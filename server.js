@@ -1086,7 +1086,7 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
         // Add brand logo in header (2:1 aspect ratio)
         slide.addImage({
           path: 'public/assets/image8.png',
-          x: 8.5, y: -0.2, w: 1.2, h: 0.6
+          x: 8.5, y: 0.2, w: 1.2, h: 0.6
         });
 
         // Create table using manual row-by-row approach to get proper colors
@@ -1257,7 +1257,7 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           const displayText = contentText.length > maxLength ? contentText.substring(0, maxLength) + '...' : contentText;
 
           slide.addText(displayText, {
-            x: 0.5, y: 1.3, w: 5.2, h: 3.8,
+            x: 0.5, y: 1.3, w: 6.7, h: 3.8,
             fontSize: 14, color: validateColor('FFFFFF'), fontFace: 'Lato',
             align: 'left', valign: 'top', wrap: true, lineSpacing: 18
           });
@@ -1265,28 +1265,28 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
 
         // Right checklist panel - full coverage from header to bottom, no padding
         slide.addShape(pptx.ShapeType.rect, {
-          x: 6.0, y: 1.1, w: 4.0, h: 4.525,
+          x: 8.0, y: 1.1, w: 2.0, h: 4.525,
           fill: { color: 'FFFFFF' }
         });
 
         // Checklist items
         if (slideData.checklist_items && slideData.checklist_items.length > 0) {
-          let checkY = 1.6;
+          let checkY = 1.2;
           for (const item of slideData.checklist_items.slice(0, 6)) {
             // Checkbox or checkmark
             const symbol = item.checked ? '✓' : '☐';
             const symbolColor = validateColor(item.checked ? '7CB342' : '999999');
 
             slide.addText(symbol, {
-              x: 6.4, y: checkY, w: 0.3, h: 0.3,
-              fontSize: 16, color: symbolColor, fontFace: 'Lato',
+              x: 8.0, y: checkY, w: 0.3, h: 0.3,
+              fontSize: 10, color: symbolColor, fontFace: 'Lato',
               align: 'center', valign: 'middle'
             });
 
             // Item text
             slide.addText(item.text || 'Item', {
-              x: 6.8, y: checkY, w: 2.8, h: 0.3,
-              fontSize: 12, color: validateColor('333333'), fontFace: 'Lato',
+              x: 8.2, y: checkY, w: 1.5, h: 0.3,
+              fontSize: 6, color: validateColor('333333'), fontFace: 'Lato',
               align: 'left', valign: 'middle'
             });
 
@@ -1324,7 +1324,7 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
         // Add brand logo in header (2:1 aspect ratio)
         slide.addImage({
           path: 'public/assets/image8.png',
-          x: 8.5, y: -0.2, w: 1.2, h: 0.6
+          x: 8.5, y: 0.2, w: 1.2, h: 0.6
         });
 
         // Add textboxes side by side with padding
