@@ -69,37 +69,54 @@ ${templateStyles}
 AVAILABLE SLIDE COMPONENTS (choose appropriate ones based on content):
 
 1. TITLE PAGE: div.slide - Main presentation title
-2. AGENDA PAGE: div.agenda-slide - Agenda with checkmarks
-3. CONTENT SLIDE: div.content-slide - Standard content with paragraphs
+2. AGENDA PAGE: div.agenda-slide - Agenda with checkmarks (use concise article titles)
+3. CONTENT SLIDE: div.content-slide - Standard content with BULLETED LISTS (no long paragraphs)
 4. TABLE LAYOUT: div.table-slide - For tabular data and structured information
-5. TRANSITION SLIDES: div.transition-slide OR div.transition-alt-slide - Section breaks
+5. TRANSITION SLIDES: div.transition-slide OR div.transition-alt-slide - Section breaks (vary by category: "In the News", "Federal Update", "Hot Topics", "Question of the Month")
 6. GRAY TEXT BOXES: div.textbox-slide with textbox-content-gray - Highlighted content boxes
 7. TEAL TEXT BOXES: div.textbox-slide with textbox-content-teal - Emphasized content boxes
-8. STATISTICS: div.statistics-slide - Charts, metrics, and data visualization
-9. CHECKLIST: div.checklist-slide - Action items and task tracking
-10. THANK YOU: div.thankyou-slide - Closing slide with Q&A
+8. CHECKLIST SIDEBAR: div.checklist-slide - For employer implications and action items (SIDEBAR FORMAT - HIGHLY USEFUL)
+9. THANK YOU: div.thankyou-slide - Closing slide with Q&A and disclaimer (ALWAYS INCLUDE)
+
+EXCLUDED COMPONENTS (DO NOT USE):
+- STATISTICS: div.statistics-slide - DO NOT use this component unless explicitly requested
 
 INTELLIGENT COMPONENT SELECTION:
 - Analyze document content to determine appropriate slide types
-- Use TABLE LAYOUT for data, comparisons, or structured lists
-- Use STATISTICS for numbers, percentages, growth metrics
+- Use TABLE LAYOUT for data, comparisons, or structured lists (auto-resize to fit data)
+- DO NOT USE STATISTICS slides - they are excluded by default
+- Use CHECKLIST SIDEBAR for employer implications (HIGHLY USEFUL - ALWAYS RETAIN THIS FORMAT)
 - Use CHECKLIST for requirements, action items, or compliance steps
-- Use TEXT BOXES for important quotes, highlights, or callouts
-- Use TRANSITION slides between major sections
-- Use THANK YOU as final slide for presentations
-- Use standard CONTENT slides for regular text content
+- Use TEAL TEXT BOXES for highlighted important information
+- Use GRAY TEXT BOXES for quotes, highlights, or callouts
+- Use TRANSITION slides between article categories - vary by category:
+  * "In the News" - use transition-slide
+  * "Federal Update" - use transition-alt-slide
+  * "Hot Topics" - use transition-slide
+  * "Question of the Month" - use transition-alt-slide
+- Use THANK YOU as final slide for presentations (MANDATORY - always include with disclaimer)
+- Use standard CONTENT slides for regular text content - FORMAT AS BULLETED LISTS, NOT PARAGRAPHS
 
 CREATE PRESENTATION:
 1. Start with TITLE PAGE (extract compelling title from document)
-2. Add AGENDA PAGE (based on document structure)
-3. Intelligently select appropriate components for document content:
-   - Tables/data → TABLE LAYOUT
-   - Statistics/numbers → STATISTICS
-   - Requirements/tasks → CHECKLIST
-   - Important highlights → TEXT BOXES
-   - Regular content → CONTENT SLIDE
-   - Section breaks → TRANSITION
-4. End with THANK YOU slide (MUST copy this EXACT structure from template):
+2. Add AGENDA PAGE with concise article titles aligned with content
+3. For EACH ARTICLE, create a 3-SLIDE STRUCTURE:
+   a) BACKGROUND + APPLICABLE EMPLOYERS slide (CONTENT slide with bulleted format)
+   b) "GO DEEPER" slide (dedicated slide preserving nuance and context from article's "go deeper" section)
+   c) EMPLOYER IMPLICATIONS slide (use CHECKLIST SIDEBAR format - this is the highly useful sidebar template)
+4. Between article categories, add TRANSITION slides:
+   - "In the News" → transition-slide
+   - "Federal Update" → transition-alt-slide
+   - "Hot Topics" → transition-slide
+   - "Question of the Month" → transition-alt-slide
+5. Intelligently select appropriate components for document content:
+   - Tables/data → TABLE LAYOUT (ensure proper auto-resize)
+   - DO NOT use STATISTICS slides
+   - Requirements/tasks → CHECKLIST (sidebar format)
+   - Employer implications → TEAL TEXT BOXES (highly useful - always retain)
+   - Important highlights → GRAY TEXT BOXES
+   - Regular content → CONTENT SLIDE with BULLETED LISTS (extract main points and sub-points as bullets and sub-bullets)
+6. End with THANK YOU slide (MANDATORY - MUST copy this EXACT structure from template):
    <div class="thankyou-slide">
      <div class="thankyou-background"></div>
      <div class="thankyou-overlay"></div>
@@ -238,37 +255,54 @@ ${templateStyles}
 AVAILABLE SLIDE COMPONENTS (choose appropriate ones based on content):
 
 1. TITLE PAGE: div.slide - Main presentation title
-2. AGENDA PAGE: div.agenda-slide - Agenda with checkmarks
-3. CONTENT SLIDE: div.content-slide - Standard content with paragraphs
+2. AGENDA PAGE: div.agenda-slide - Agenda with checkmarks (use concise article titles)
+3. CONTENT SLIDE: div.content-slide - Standard content with BULLETED LISTS (no long paragraphs)
 4. TABLE LAYOUT: div.table-slide - For tabular data and structured information
-5. TRANSITION SLIDES: div.transition-slide OR div.transition-alt-slide - Section breaks
+5. TRANSITION SLIDES: div.transition-slide OR div.transition-alt-slide - Section breaks (vary by category: "In the News", "Federal Update", "Hot Topics", "Question of the Month")
 6. GRAY TEXT BOXES: div.textbox-slide with textbox-content-gray - Highlighted content boxes
 7. TEAL TEXT BOXES: div.textbox-slide with textbox-content-teal - Emphasized content boxes
-8. STATISTICS: div.statistics-slide - Charts, metrics, and data visualization
-9. CHECKLIST: div.checklist-slide - Action items and task tracking
-10. THANK YOU: div.thankyou-slide - Closing slide with Q&A
+8. CHECKLIST SIDEBAR: div.checklist-slide - For employer implications and action items (SIDEBAR FORMAT - HIGHLY USEFUL)
+9. THANK YOU: div.thankyou-slide - Closing slide with Q&A and disclaimer (ALWAYS INCLUDE)
+
+EXCLUDED COMPONENTS (DO NOT USE):
+- STATISTICS: div.statistics-slide - DO NOT use this component unless explicitly requested
 
 INTELLIGENT COMPONENT SELECTION:
 - Analyze document content to determine appropriate slide types
-- Use TABLE LAYOUT for data, comparisons, or structured lists
-- Use STATISTICS for numbers, percentages, growth metrics
+- Use TABLE LAYOUT for data, comparisons, or structured lists (auto-resize to fit data)
+- DO NOT USE STATISTICS slides - they are excluded by default
+- Use CHECKLIST SIDEBAR for employer implications (HIGHLY USEFUL - ALWAYS RETAIN THIS FORMAT)
 - Use CHECKLIST for requirements, action items, or compliance steps
-- Use TEXT BOXES for important quotes, highlights, or callouts
-- Use TRANSITION slides between major sections
-- Use THANK YOU as final slide for presentations
-- Use standard CONTENT slides for regular text content
+- Use TEAL TEXT BOXES for highlighted important information
+- Use GRAY TEXT BOXES for quotes, highlights, or callouts
+- Use TRANSITION slides between article categories - vary by category:
+  * "In the News" - use transition-slide
+  * "Federal Update" - use transition-alt-slide
+  * "Hot Topics" - use transition-slide
+  * "Question of the Month" - use transition-alt-slide
+- Use THANK YOU as final slide for presentations (MANDATORY - always include with disclaimer)
+- Use standard CONTENT slides for regular text content - FORMAT AS BULLETED LISTS, NOT PARAGRAPHS
 
 CREATE PRESENTATION:
 1. Start with TITLE PAGE (extract compelling title from document)
-2. Add AGENDA PAGE (based on document structure)
-3. Intelligently select appropriate components for document content:
-   - Tables/data → TABLE LAYOUT
-   - Statistics/numbers → STATISTICS
-   - Requirements/tasks → CHECKLIST
-   - Important highlights → TEXT BOXES
-   - Regular content → CONTENT SLIDE
-   - Section breaks → TRANSITION
-4. End with THANK YOU slide (MUST copy this EXACT structure from template):
+2. Add AGENDA PAGE with concise article titles aligned with content
+3. For EACH ARTICLE, create a 3-SLIDE STRUCTURE:
+   a) BACKGROUND + APPLICABLE EMPLOYERS slide (CONTENT slide with bulleted format)
+   b) "GO DEEPER" slide (dedicated slide preserving nuance and context from article's "go deeper" section)
+   c) EMPLOYER IMPLICATIONS slide (use CHECKLIST SIDEBAR format - this is the highly useful sidebar template)
+4. Between article categories, add TRANSITION slides:
+   - "In the News" → transition-slide
+   - "Federal Update" → transition-alt-slide
+   - "Hot Topics" → transition-slide
+   - "Question of the Month" → transition-alt-slide
+5. Intelligently select appropriate components for document content:
+   - Tables/data → TABLE LAYOUT (ensure proper auto-resize)
+   - DO NOT use STATISTICS slides
+   - Requirements/tasks → CHECKLIST (sidebar format)
+   - Employer implications → TEAL TEXT BOXES (highly useful - always retain)
+   - Important highlights → GRAY TEXT BOXES
+   - Regular content → CONTENT SLIDE with BULLETED LISTS (extract main points and sub-points as bullets and sub-bullets)
+6. End with THANK YOU slide (MANDATORY - MUST copy this EXACT structure from template):
    <div class="thankyou-slide">
      <div class="thankyou-background"></div>
      <div class="thankyou-overlay"></div>
@@ -468,25 +502,24 @@ Extract and return ONLY a JSON object with this structure, analyzing ALL slide c
     {
       "type": "agenda",
       "title": "Agenda",
-      "items": ["item 1", "item 2", "item 3"]
+      "items": ["Main item 1", "  Sub-item 1a", "  Sub-item 1b", "Main item 2"]
     },
     {
       "type": "content",
       "title": "slide title",
-      "content": ["paragraph 1", "paragraph 2"]
+      "content": ["• Main point 1", "  ◦ Sub-point 1a", "  ◦ Sub-point 1b", "• Main point 2"],
+      "bullets": true
+    },
+    {
+      "type": "go_deeper",
+      "title": "Go Deeper: [Article Title]",
+      "content": ["• Detailed point 1", "• Detailed point 2"]
     },
     {
       "type": "table",
       "title": "table slide title",
       "headers": ["col1", "col2", "col3"],
       "rows": [["data1", "data2", "data3"], ["data4", "data5", "data6"]]
-    },
-    {
-      "type": "statistics",
-      "title": "statistics title",
-      "description": "stats description",
-      "chart_data": [{"year": "2020", "value": 30}],
-      "metrics": [{"label": "Revenue Growth", "value": "80%"}]
     },
     {
       "type": "checklist",
@@ -504,6 +537,10 @@ Extract and return ONLY a JSON object with this structure, analyzing ALL slide c
       "title": "transition text"
     },
     {
+      "type": "transition_alt",
+      "title": "alternate transition text"
+    },
+    {
       "type": "thankyou",
       "title": "THANK YOU!",
       "subtitle": "Q&A"
@@ -514,21 +551,54 @@ Extract and return ONLY a JSON object with this structure, analyzing ALL slide c
 Component Detection Rules:
 1. div.slide = title slide
 2. div.agenda-slide = agenda slide
-3. div.content-slide = content slide
-4. div.table-slide = table slide (extract table headers and data)
-5. div.statistics-slide = statistics slide (extract charts and metrics)
-6. div.checklist-slide = checklist slide (extract checklist items and status)
+3. div.content-slide = content slide (use for background + applicable employers)
+4. div.content-slide with "Go Deeper" in title = go_deeper slide type
+5. div.table-slide = table slide (extract table headers and data)
+6. div.checklist-slide = checklist slide (SIDEBAR FORMAT - use for employer implications)
 7. div.textbox-slide = textbox slide (extract textbox content and colors)
 8. div.transition-slide OR div.transition-alt-slide = transition slide
 9. div.thankyou-slide = thank you slide
 
-Extraction Rules:
+IMPORTANT: Employer Implications should ALWAYS use div.checklist-slide (sidebar format), NOT textbox
+
+CRITICAL EXTRACTION RULES:
 - Extract actual content, NOT placeholder text
 - For briefing_header: Always format as "BCS Monthly Briefing: [Month Day, Year]" with current date
+
+BULLET FORMATTING (MANDATORY):
+- ALWAYS preserve bullet points (•) and sub-bullets (◦) in content
+- Look for <li>, <ul>, or bullet characters in HTML
+- If content is in paragraphs, convert to bulleted format with • for main points
+- Extract as ["• Point 1", "  ◦ Sub-point 1a", "• Point 2"] format
+- NEVER return plain paragraphs - ALWAYS use bullets
+
+AGENDA FORMATTING (CRITICAL - MANDATORY):
+- MUST preserve hierarchical structure with TWO-SPACE indentation for nested items
+- Main items: NO spaces at start, e.g., "Main Topic"
+- Sub-items: EXACTLY TWO SPACES at start, e.g., "  Sub-topic"
+- Detect nested items: <li class="agenda-item nested"> OR indented <li>
+- Extract format: ["Main item 1", "  Sub-item 1a", "  Sub-item 1b", "Main item 2"]
+- DO NOT trim() or strip() leading spaces from sub-items
+- The two-space prefix "  " is REQUIRED for proper PPT indentation
+- NEVER remove leading spaces from agenda items
+
+SLIDE TYPE DETECTION:
+- "Go Deeper" in title or heading → type: "go_deeper"
+- "Employer Implications" or "Takeaways" in title → type: "checklist" (sidebar format)
+- "Implications" or "Action Items" in title → type: "checklist" (sidebar format)
+- Sidebar/checklist format → type: "checklist"
+- Tables with headers/rows → type: "table"
+- Transition headers for "In the News" or "Hot Topics" → type: "transition"
+- Transition headers for "Federal Update" or "Question of the Month" → type: "transition_alt"
+- Other transition headers → type: "transition"
+- NEVER create type: "statistics" (excluded by default)
+
+OTHER RULES:
 - For tables: extract th elements as headers, td elements as row data
-- For statistics: extract chart data and key metrics
-- For checklists: detect checked/unchecked status from classes
+- For checklists: extract as checklist_items array with text and checked status
 - For textboxes: detect gray/teal colors and extract header/content pairs
+- IMPORTANT: Employer implications should ALWAYS be type: "checklist" (not textbox)
+- Identify article categories and use appropriate transition slide types
 - Convert HTML entities to proper text
 - Return ONLY valid JSON, no explanations or markdown`;
 
@@ -558,9 +628,16 @@ Extraction Rules:
         cleanSlide.subtitle = cleanTextContent(cleanSlide.subtitle);
       }
 
-      // Clean agenda items
+      // Clean agenda items - PRESERVE leading spaces for sub-bullets
       if (cleanSlide.items) {
-        cleanSlide.items = cleanSlide.items.map(item => cleanTextContent(item));
+        cleanSlide.items = cleanSlide.items.map(item => {
+          if (!item) return '';
+          // Clean text but preserve leading spaces for indentation
+          const leadingSpaces = item.match(/^(\s*)/)[0];
+          const cleanedText = cleanTextContent(item);
+          // Re-add leading spaces if they were removed
+          return leadingSpaces + cleanedText;
+        });
       }
 
       // Clean content paragraphs
@@ -654,13 +731,20 @@ function parseHtmlSlidesRegex(html) {
     console.log('Agenda content preview:', agendaContent.substring(0, 300));
     const agendaItems = [];
 
-    // Extract agenda items - the pattern that matches the actual HTML structure
-    const itemMatches = agendaContent.matchAll(/<li class="agenda-item"><span class="agenda-checkmark">✓<\/span>\s*(.*?)<\/li>/gs);
-    console.log('Item matches found with checkmarks:', [...itemMatches].length);
+    // Extract agenda items - detect nested items with class="nested"
+    console.log('Item matches found with checkmarks:', [...agendaContent.matchAll(/<li class="agenda-item/g)].length);
 
-    for (const match of agendaContent.matchAll(/<li class="agenda-item"><span class="agenda-checkmark">✓<\/span>\s*(.*?)<\/li>/gs)) {
+    for (const match of agendaContent.matchAll(/<li class="agenda-item(?:\s+nested)?"[^>]*>.*?<span class="agenda-checkmark">✓<\/span>\s*(.*?)<\/li>/gs)) {
+      const fullMatch = match[0];
+      const isNested = fullMatch.includes('class="agenda-item nested"');
       let itemText = match[1].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').trim();
-      console.log('Extracted agenda item:', itemText);
+
+      // Add two-space prefix for nested items
+      if (isNested && !itemText.startsWith('  ')) {
+        itemText = '  ' + itemText;
+      }
+
+      console.log('Extracted agenda item:', itemText, isNested ? '(nested)' : '');
       if (itemText) {
         agendaItems.push(itemText);
       }
@@ -669,10 +753,18 @@ function parseHtmlSlidesRegex(html) {
     // Fallback: If no items found with checkmarks, try without checkmarks
     if (agendaItems.length === 0) {
       console.log('Trying fallback pattern for agenda items...');
-      const itemMatches2 = agendaContent.matchAll(/<li class="agenda-item"[^>]*>(.*?)<\/li>/gs);
+      const itemMatches2 = agendaContent.matchAll(/<li class="agenda-item(?:\s+nested)?"[^>]*>(.*?)<\/li>/gs);
       for (const match of itemMatches2) {
+        const fullMatch = match[0];
+        const isNested = fullMatch.includes('class="agenda-item nested"');
         let itemText = match[1].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/✓/g, '').trim();
-        console.log('Fallback extracted agenda item:', itemText);
+
+        // Add two-space prefix for nested items
+        if (isNested && !itemText.startsWith('  ')) {
+          itemText = '  ' + itemText;
+        }
+
+        console.log('Fallback extracted agenda item:', itemText, isNested ? '(nested)' : '');
         if (itemText) {
           agendaItems.push(itemText);
         }
@@ -690,31 +782,54 @@ function parseHtmlSlidesRegex(html) {
     console.log('No agenda slide found');
   }
 
-  // Extract content slides - updated for div structure
+  // Extract content slides - updated for div structure with bullet support
   const contentMatches = html.matchAll(/<div class="content-slide">([\s\S]*?)<div class="content-page-number">/g);
 
   for (const match of contentMatches) {
     const slideContent = match[1];
     const slideTitle = slideContent.match(/<div class="content-title"[^>]*>(.*?)<\/div>/)?.[1] || 'Content Slide';
+    const cleanTitle = slideTitle.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&');
 
-    const paragraphs = [];
-    const paragraphMatches = slideContent.matchAll(/<p class="content-paragraph"[^>]*>([\s\S]*?)<\/p>/g);
+    // Determine if this is a "Go Deeper" slide
+    const isGoDeeper = cleanTitle.toLowerCase().includes('go deeper');
 
-    for (const pMatch of paragraphMatches) {
-      let text = pMatch[1].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').trim();
+    const bullets = [];
+
+    // Try to extract bullets from <li> elements first
+    const listItemMatches = slideContent.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/g);
+    for (const liMatch of listItemMatches) {
+      let text = liMatch[1].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').trim();
+      if (text && !text.startsWith('•')) {
+        text = '• ' + text;
+      }
       if (text) {
-        paragraphs.push(text);
+        bullets.push(text);
       }
     }
 
-    if (paragraphs.length > 0) {
+    // If no list items, try paragraphs and convert to bullets
+    if (bullets.length === 0) {
+      const paragraphMatches = slideContent.matchAll(/<p class="content-paragraph"[^>]*>([\s\S]*?)<\/p>/g);
+      for (const pMatch of paragraphMatches) {
+        let text = pMatch[1].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').trim();
+        if (text && !text.startsWith('•')) {
+          text = '• ' + text;
+        }
+        if (text) {
+          bullets.push(text);
+        }
+      }
+    }
+
+    if (bullets.length > 0) {
       slides.push({
-        type: 'content',
-        title: slideTitle.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&'),
-        content: paragraphs
+        type: isGoDeeper ? 'go_deeper' : 'content',
+        title: cleanTitle,
+        content: bullets,
+        bullets: true
       });
 
-      console.log(`Found content slide: "${slideTitle.replace(/<[^>]*>/g, '')}" with ${paragraphs.length} paragraphs`);
+      console.log(`Found ${isGoDeeper ? 'Go Deeper' : 'content'} slide: "${cleanTitle}" with ${bullets.length} bullets`);
     }
   }
 
@@ -899,30 +1014,37 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           fill: { color: 'FFFFFF', transparency: 0 }
         });
 
-        // Right side - agenda items with checkmarks
-        let yPos = 1.4;
-        const maxItems = Math.min(slideData.items.length, 6); // Limit to 6 items to prevent overflow
+        // Right side - agenda items with checkmarks (start from top)
+        let yPos = 0.3;  // Start from very top of right panel
+        const maxItems = Math.min(slideData.items.length, 12); // Increased to 12 items
+        const lineHeight = 0.42;  // Compact spacing to fit more items
 
         for (let j = 0; j < maxItems; j++) {
           const item = slideData.items[j];
           if (!item || item.trim() === '') continue;
 
-          // Add green checkmark
+          // Detect if item is a sub-bullet (starts with spaces or specific characters)
+          const isSubBullet = item.startsWith('  ') || item.startsWith('◦') || item.startsWith('- ');
+          const indent = isSubBullet ? 0.3 : 0;
+
+          // Add green checkmark bullet (smaller)
           slide.addText('✓', {
-            x: 4.3, y: yPos, w: 0.3, h: 0.5,
-            fontSize: 20, color: validateColor('7CB342'), fontFace: 'Lato',
+            x: 4.2 + indent, y: yPos, w: 0.3, h: 0.4,
+            fontSize: isSubBullet ? 16 : 18,  // Reduced from 20/24
+            color: validateColor('7CB342'), fontFace: 'Lato',
             align: 'center', bold: true, valign: 'middle'
           });
 
-          // Add agenda item text - smaller font
-          const safeItem = (item || '').toString();
-          const itemText = safeItem.length > 60 ? safeItem.substring(0, 57) + '...' : safeItem;
+          // Add agenda item text with smaller font
+          const safeItem = (item || '').toString().trim().replace(/^[◦\-]\s*/, '');
+          const itemText = safeItem.length > 65 ? safeItem.substring(0, 62) + '...' : safeItem;
           slide.addText(itemText, {
-            x: 4.8, y: yPos, w: 4.8, h: 0.5,
-            fontSize: 18, color: validateColor('28295D'), fontFace: 'Lato',
-            align: 'left', valign: 'middle'
+            x: 4.6 + indent, y: yPos, w: 5.0 - indent, h: 0.4,
+            fontSize: isSubBullet ? 13 : 15,  // Reduced from 16/18
+            color: validateColor('28295D'), fontFace: 'Lato',
+            align: 'left', valign: 'middle', bold: false
           });
-          yPos += 0.6;
+          yPos += lineHeight;
         }
 
         // Logo in lower left with less padding (moved more to the left)
@@ -968,11 +1090,17 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           x: 8.5, y: 0.2, w: 1.2, h: 0.6
         });
 
-        
 
-        // Content paragraphs - improved text handling to prevent overflow
+
+        // Content as bulleted lists - optimized for live presenting
         const safeContent = slideData.content && Array.isArray(slideData.content) ? slideData.content : ['No content available'];
-        const allContent = safeContent.join('\n\n');
+
+        // Remove bullet characters - PPT will add them automatically
+        const bulletContent = safeContent.map(item => {
+          return item.trim().replace(/^[•◦]\s*/, '');
+        });
+
+        const allContent = bulletContent.join('\n');
 
         // More conservative character limit for better formatting
         if (allContent.length > 600) {
@@ -980,11 +1108,11 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           const chunks = [];
           let currentChunk = '';
 
-          for (const paragraph of slideData.content) {
-            const testChunk = currentChunk + (currentChunk ? '\n\n' : '') + paragraph;
+          for (const bullet of bulletContent) {
+            const testChunk = currentChunk + (currentChunk ? '\n' : '') + bullet;
             if (testChunk.length > 600 && currentChunk.length > 0) {
               chunks.push(currentChunk.trim());
-              currentChunk = paragraph;
+              currentChunk = bullet;
             } else {
               currentChunk = testChunk;
             }
@@ -994,12 +1122,13 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
             chunks.push(currentChunk.trim());
           }
 
-          // Add first chunk to current slide - prevent overflow
+          // Add first chunk to current slide as bulleted list
           slide.addText(chunks[0], {
-            x: 0.6, y: 1.5, w: 8.8, h: 3.0, // Reduced height
-            fontSize: 14, color: validateColor('333333'), fontFace: 'Lato', // Smaller font
-            align: 'left', lineSpacing: 18, valign: 'top', // Tighter spacing
-            wrap: true
+            x: 0.6, y: 1.5, w: 8.8, h: 3.5,
+            fontSize: 14, color: validateColor('333333'), fontFace: 'Lato',
+            align: 'left', lineSpacing: 20, valign: 'top',
+            wrap: true,
+            bullet: true  // Use bullet points only, no numbering
           });
 
           // Add page number
@@ -1033,10 +1162,11 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
             });
 
             contSlide.addText(chunks[c], {
-              x: 0.6, y: 1.5, w: 8.8, h: 3.0, // Reduced height
-              fontSize: 14, color: validateColor('333333'), fontFace: 'Lato', // Smaller font
-              align: 'left', lineSpacing: 18, valign: 'top', // Tighter spacing
-              wrap: true
+              x: 0.6, y: 1.5, w: 8.8, h: 3.5,
+              fontSize: 14, color: validateColor('333333'), fontFace: 'Lato',
+              align: 'left', lineSpacing: 20, valign: 'top',
+              wrap: true,
+              bullet: true  // Use bullet points only, no numbering
             });
 
             contSlide.addText(`${i + 1}-${c + 1}`, {
@@ -1046,12 +1176,13 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
             });
           }
         } else {
-          // Content fits on one slide - prevent overflow
+          // Content fits on one slide as bulleted list
           slide.addText(allContent, {
-            x: 0.6, y: 1.5, w: 8.8, h: 3.0, // Reduced height to prevent overflow
-            fontSize: 14, color: validateColor('333333'), fontFace: 'Lato', // Smaller font
-            align: 'left', lineSpacing: 18, valign: 'top', // Tighter line spacing
-            wrap: true
+            x: 0.6, y: 1.5, w: 8.8, h: 3.5,
+            fontSize: 14, color: validateColor('333333'), fontFace: 'Lato',
+            align: 'left', lineSpacing: 20, valign: 'top',
+            wrap: true,
+            bullet: true  // Use bullet points only, no numbering
           });
 
           // Add page number
@@ -1063,6 +1194,70 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
         }
 
         console.log(`Created content slide: "${slideData.title}" with ${slideData.content.length} paragraphs`);
+
+      } else if (slideData.type === 'go_deeper') {
+        const slide = pptx.addSlide();
+        // Go Deeper slide - dedicated slide for nuance and context
+        slide.background = { color: 'F5F5F5' };
+
+        // Purple header
+        slide.addShape(pptx.ShapeType.rect, {
+          x: 0, y: 0, w: 10, h: 1.1,
+          fill: { color: '28295D' }
+        });
+
+        // Go Deeper title
+        const titleText = slideData.title.length > 80 ? slideData.title.substring(0, 77) + '...' : slideData.title;
+        slide.addText(titleText, {
+          x: 0.5, y: 0.15, w: 7, h: 0.8,
+          fontSize: 28, color: validateColor('FFFFFF'), fontFace: 'Lato',
+          align: 'left', bold: false, valign: 'middle'
+        });
+
+        // Add brand logo in header (2:1 aspect ratio)
+        slide.addImage({
+          path: 'public/assets/image8.png',
+          x: 8.5, y: 0.2, w: 1.2, h: 0.6
+        });
+
+        // Add "Go Deeper" section header with gray background
+        slide.addShape(pptx.ShapeType.rect, {
+          x: 0.6, y: 1.3, w: 8.8, h: 0.5,
+          fill: { color: 'E8E8E8' }
+        });
+
+        slide.addText('Go Deeper', {
+          x: 0.8, y: 1.35, w: 8.4, h: 0.4,
+          fontSize: 16, color: validateColor('28295D'), fontFace: 'Lato',
+          align: 'left', bold: true, valign: 'middle'
+        });
+
+        // Content as bulleted lists for nuance and context
+        const safeContent = slideData.content && Array.isArray(slideData.content) ? slideData.content : ['No content available'];
+
+        // Remove bullet characters - PPT will add them automatically
+        const bulletContent = safeContent.map(item => {
+          return item.trim().replace(/^[•◦]\s*/, '');
+        });
+
+        const allContent = bulletContent.join('\n');
+
+        slide.addText(allContent, {
+          x: 0.6, y: 2.0, w: 8.8, h: 3.0,
+          fontSize: 13, color: validateColor('333333'), fontFace: 'Lato',
+          align: 'left', lineSpacing: 18, valign: 'top',
+          wrap: true,
+          bullet: true  // Use bullet points only, no numbering
+        });
+
+        // Add page number
+        slide.addText(`${i + 1}`, {
+          x: 9, y: 5.1, w: 0.8, h: 0.4,
+          fontSize: 18, color: validateColor('28295D'), fontFace: 'Lato',
+          align: 'center', valign: 'middle'
+        });
+
+        console.log(`Created Go Deeper slide: "${slideData.title}"`);
 
       } else if (slideData.type === 'table') {
         const slide = pptx.addSlide();
@@ -1089,18 +1284,39 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           x: 8.5, y: 0.2, w: 1.2, h: 0.6
         });
 
-        // Create table using manual row-by-row approach to get proper colors
+        // Create table with auto-sizing to accommodate data
         if (slideData.headers && slideData.rows) {
           const tableData = [slideData.headers, ...slideData.rows];
 
-          // Create table manually with proper styling for each row
+          // Auto-calculate optimal dimensions
+          const numCols = tableData[0].length;
+          const numRows = tableData.length;
+
+          // Calculate column widths based on content length for better fit
+          const columnWidths = new Array(numCols).fill(0);
+          tableData.forEach(row => {
+            row.forEach((cell, colIndex) => {
+              const cellLength = String(cell || '').length;
+              columnWidths[colIndex] = Math.max(columnWidths[colIndex], cellLength);
+            });
+          });
+
+          // Normalize column widths to fit within available space
+          const totalContentWidth = columnWidths.reduce((a, b) => a + b, 0);
+          const availableWidth = 9.2;
+          const normalizedWidths = columnWidths.map(w => (w / totalContentWidth) * availableWidth);
+
+          // Auto-calculate row height based on number of rows
+          const availableHeight = 3.8;
+          const rowHeight = Math.max(0.4, Math.min(0.6, availableHeight / numRows));
+
           const startY = 1.4;
-          const rowHeight = 0.5; // Increased for better text spacing
-          const colWidth = 9.2 / tableData[0].length; // Distribute width evenly
+          let currentX = 0.4;
 
           tableData.forEach((row, rowIndex) => {
+            currentX = 0.4; // Reset X for each row
             row.forEach((cell, colIndex) => {
-              const x = 0.4 + (colIndex * colWidth);
+              const colWidth = normalizedWidths[colIndex];
               const y = startY + (rowIndex * rowHeight);
 
               // Determine colors based on row
@@ -1121,23 +1337,26 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
 
               // Add cell background
               slide.addShape(pptx.ShapeType.rect, {
-                x: x, y: y, w: colWidth, h: rowHeight,
+                x: currentX, y: y, w: colWidth, h: rowHeight,
                 fill: { color: fillColor },
                 line: { color: validateColor('FFFFFF'), width: 2 }
               });
 
-              // Add cell text with better padding and wrapping
+              // Add cell text with better padding and wrapping - auto-size font
+              const fontSize = rowIndex === 0 ? Math.min(12, 10 + (0.1 * colWidth)) : Math.min(10, 8 + (0.1 * colWidth));
               slide.addText(String(cell || ''), {
-                x: x + 0.1, y: y + 0.1, w: colWidth - 0.2, h: rowHeight - 0.2,
-                fontSize: rowIndex === 0 ? 12 : 10, // Smaller fonts for better fit
+                x: currentX + 0.05, y: y + 0.05, w: colWidth - 0.1, h: rowHeight - 0.1,
+                fontSize: fontSize,
                 color: textColor,
                 fontFace: 'Lato',
                 align: rowIndex === 0 ? 'center' : 'left',
                 valign: 'middle',
                 bold: rowIndex === 0,
-                wrap: true, // Enable text wrapping
-                lineSpacing: 14 // Better line spacing
+                wrap: true,
+                lineSpacing: 12
               });
+
+              currentX += colWidth; // Move to next column
             });
           });
         }
@@ -1378,31 +1597,57 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
 
         console.log(`Created textbox slide: "${slideData.title}"`);
 
-      } else if (slideData.type === 'transition') {
+      } else if (slideData.type === 'transition' || slideData.type === 'transition_alt') {
         const slide = pptx.addSlide();
-        // Transition slide
+
+        // Use alternate transition style for transition_alt
+        const isAltTransition = slideData.type === 'transition_alt';
+
+        // Transition slide - use image1.jpg for standard, image5.jpg for alt (matching template)
         slide.addImage({
-          path: 'public/assets/image1.jpg',
+          path: isAltTransition ? 'public/assets/image5.jpg' : 'public/assets/image1.jpg',
           x: 0, y: 0, w: 10, h: 5.625
         });
 
-        // No overlay for transition slide
-
-        // Transition content box (moved more to the left)
-        slide.addShape(pptx.ShapeType.rect, {
-          x: 0.5, y: 1.5, w: 6, h: 2.5,
-          fill: { color: '28295D' }
-        });
+        // Add overlay for alt transition only
+        if (isAltTransition) {
+          slide.addShape(pptx.ShapeType.rect, {
+            x: 0, y: 0, w: 10, h: 5.625,
+            fill: { color: '28295D', transparency: 20 }  // 0.8 opacity = 20% transparency
+          });
+        }
 
         // Transition title (all caps)
         const transitionTitle = (slideData.title || 'TRANSITION SLIDE').toUpperCase();
-        slide.addText(transitionTitle, {
-          x: 1, y: 2.2, w: 5, h: 1.1,
-          fontSize: 36, color: validateColor('FFFFFF'), fontFace: 'Lato',
-          align: 'left', bold: true, valign: 'middle'
-        });
 
-        // Add brand logo (2:1 aspect ratio)
+        if (isAltTransition) {
+          // Alternative transition: centered white bordered box
+          slide.addShape(pptx.ShapeType.rect, {
+            x: 2.0, y: 1.69, w: 6.0, h: 2.25,  // Centered box (60% width, 40% height)
+            fill: { type: 'solid', color: '000000', transparency: 100 },  // Transparent fill
+            line: { color: 'FFFFFF', width: 4 }  // White border
+          });
+
+          slide.addText(transitionTitle, {
+            x: 2.0, y: 1.69, w: 6.0, h: 2.25,
+            fontSize: 40, color: validateColor('FFFFFF'), fontFace: 'Lato',
+            align: 'center', bold: true, valign: 'middle'
+          });
+        } else {
+          // Standard transition: purple box on left
+          slide.addShape(pptx.ShapeType.rect, {
+            x: 0.5, y: 1.5, w: 6, h: 2.5,
+            fill: { color: '28295D' }
+          });
+
+          slide.addText(transitionTitle, {
+            x: 1, y: 2.2, w: 5, h: 1.1,
+            fontSize: 36, color: validateColor('FFFFFF'), fontFace: 'Lato',
+            align: 'left', bold: true, valign: 'middle'
+          });
+        }
+
+        // Add brand logo (2:1 aspect ratio) - top right for both
         slide.addImage({
           path: 'public/assets/image8.png',
           x: 8, y: 0.2, w: 1.6, h: 0.8
@@ -1415,7 +1660,7 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           align: 'center', valign: 'middle'
         });
 
-        console.log(`Created transition slide: "${slideData.title}"`);
+        console.log(`Created ${isAltTransition ? 'alternate' : 'standard'} transition slide: "${slideData.title}"`);
 
       } else if (slideData.type === 'thankyou') {
         const slide = pptx.addSlide();
