@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCS Monthly Briefing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            width: 100vw;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/assets/image9.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #28295d;
+            opacity: 0.8;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 5%;
+        }
+
+        .title {
+            font-size: 74px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 36px;
+            font-weight: 400;
+            color: white;
+            text-align: left;
+            opacity: 0.9;
+        }
+
+        .brand-logo {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            z-index: 20;
+            width: 150px;
+            height: 150px;
+        }
+
+        .brand-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Agenda Page Styles */
+        .agenda-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+        }
+
+        .agenda-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/assets/image7.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .agenda-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #28295d;
+            opacity: 0.8;
+        }
+
+        .agenda-left {
+            position: relative;
+            z-index: 10;
+            width: 40%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+        }
+
+        .agenda-title {
+            font-size: 72px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+            line-height: 1.1;
+            margin-bottom: 40px;
+        }
+
+        .agenda-logo {
+            position: absolute;
+            bottom: 60px;
+            left: 60px;
+            z-index: 20;
+            width: 120px;
+            height: 120px;
+        }
+
+        .agenda-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .agenda-right {
+            position: relative;
+            z-index: 10;
+            width: 60%;
+            height: 100%;
+            background-color: rgba(245, 245, 245, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 60px;
+        }
+
+        .agenda-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .agenda-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 35px;
+            font-size: 28px;
+            color: #28295d;
+            font-weight: 400;
+        }
+
+        .agenda-checkmark {
+            width: 24px;
+            height: 24px;
+            margin-right: 20px;
+            color: #7cb342;
+            font-size: 20px;
+        }
+
+        .agenda-item.nested {
+            margin-left: 44px;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            font-size: 24px;
+            color: #28295d;
+            font-weight: 400;
+        }
+
+        /* Content Slide Styles */
+        .content-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .content-header {
+            background-color: #28295d;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+        }
+
+        .content-logo {
+            max-width: 300px;
+            max-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .content-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .content-body {
+            flex: 1;
+            padding: 80px 80px 120px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .content-paragraph {
+            font-size: 28px;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .content-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            color: #28295d;
+            font-weight: 400;
+        }
+
+        /* Transition Slide Styles */
+        .transition-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transition-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/assets/image1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .transition-content {
+            position: relative;
+            z-index: 10;
+            width: 60%;
+            height: 60%;
+            background-color: #28295d;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-left: -30%;
+            padding-left: 60px;
+        }
+
+        .transition-title {
+            font-size: 72px;
+            font-weight: bold;
+            color: white;
+            text-align: left;
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .transition-logo {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 20;
+            width: 280px;
+            height: 120px;
+        }
+
+        .transition-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .transition-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            font-size: 28px;
+            color: white;
+            font-weight: 400;
+        }
+
+        /* Transition Slide Alt Styles */
+        .transition-alt-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transition-alt-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/assets/image5.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .transition-alt-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #28295d;
+            opacity: 0.8;
+        }
+
+        .transition-alt-content {
+            position: relative;
+            z-index: 10;
+            width: 60%;
+            height: 40%;
+            border: 4px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transition-alt-title {
+            font-size: 72px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .transition-alt-logo {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 20;
+            width: 280px;
+            height: 120px;
+        }
+
+        .transition-alt-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .transition-alt-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            font-size: 28px;
+            color: white;
+            font-weight: 400;
+        }
+
+        /* Statistics Slide Styles */
+        .statistics-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .statistics-header {
+            background-color: #28295d;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .statistics-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+        }
+
+        .statistics-logo {
+            max-width: 300px;
+            max-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .statistics-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .statistics-body {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            gap: 60px;
+        }
+
+        .statistics-chart-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .statistics-chart {
+            display: flex;
+            align-items: end;
+            justify-content: space-around;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        .chart-bar {
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bar-stack {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .bar-segment-purple {
+            background-color: #28295d;
+            margin-bottom: 2px;
+        }
+
+        .bar-segment-teal {
+            background-color: #a8d5d5;
+        }
+
+        .chart-label {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .chart-y-axis {
+            position: absolute;
+            left: 20px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .statistics-panel {
+            width: 400px;
+            background-color: #28295d;
+            border-radius: 12px;
+            padding: 40px;
+            color: white;
+        }
+
+        .statistics-panel-title {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .statistics-description {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .statistics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .statistic-item {
+            text-align: center;
+        }
+
+        .statistic-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .statistic-label {
+            font-size: 14px;
+            opacity: 0.8;
+            line-height: 1.3;
+        }
+
+        .statistics-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            color: #28295d;
+            font-weight: 400;
+        }
+
+        /* Checklist Slide Styles */
+        .checklist-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #28295d;
+        }
+
+        .checklist-header {
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .checklist-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+        }
+
+        .checklist-logo {
+            max-width: 300px;
+            max-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .checklist-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .checklist-body {
+            flex: 1;
+            display: flex;
+        }
+
+        .checklist-content {
+            flex: 1;
+            padding: 60px;
+            color: white;
+        }
+
+        .checklist-content-heading {
+            font-size: 64px;
+            font-weight: 300;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .checklist-item {
+            margin-bottom: 30px;
+            font-size: 20px;
+            line-height: 1.6;
+            color: white;
+        }
+
+        .checklist-panel {
+            width: 400px;
+            background-color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checklist-panel-content {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .checklist-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .checklist-list-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .checklist-checkbox {
+            width: 24px;
+            height: 24px;
+            margin-right: 20px;
+            color: #7cb342;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .checklist-checkbox.checked::before {
+            content: '✓';
+        }
+
+        .checklist-checkbox-square {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #7cb342;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .checklist-subitem {
+            margin-left: 30px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .checklist-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            color: white;
+            font-weight: 400;
+        }
+
+        /* Thank You Slide Styles */
+        .thankyou-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .thankyou-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/assets/image10.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .thankyou-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #28295d;
+            opacity: 0.85;
+        }
+
+        .thankyou-content {
+            position: relative;
+            z-index: 10;
+            padding: 0 80px;
+            max-width: 60%;
+        }
+
+        .thankyou-title {
+            font-size: 64px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .thankyou-subtitle {
+            font-size: 64px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+            line-height: 1.1;
+        }
+
+        .thankyou-disclaimer {
+            position: absolute;
+            bottom: 80px;
+            left: 80px;
+            right: 200px;
+            font-size: 12px;
+            color: white;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .thankyou-logo {
+            position: absolute;
+            bottom: 60px;
+            right: 80px;
+            z-index: 20;
+            width: 120px;
+            height: 120px;
+        }
+
+        .thankyou-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .thankyou-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            font-size: 28px;
+            color: white;
+            font-weight: 400;
+        }
+
+        /* Component Slide Styles */
+        .component-container {
+            width: 100%;
+            height: 100vh;
+            padding: 40px;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .component-slide {
+            width: 18%;
+            height: 70vh;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .component-header {
+            height: 30%;
+            background-color: #28295d;
+        }
+
+        .component-body {
+            height: 70%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 300;
+            color: #333;
+        }
+
+        .component-body-gray {
+            background-color: #e8e8e8;
+        }
+
+        .component-body-teal {
+            background-color: #a8d5d5;
+        }
+
+        .component-body-white {
+            background-color: #ffffff;
+        }
+
+        .component-body-dark {
+            background-color: #666666;
+            color: white;
+        }
+
+        /* Table Slide Styles */
+        .table-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .table-header {
+            background-color: #28295d;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+        }
+
+        .table-logo {
+            max-width: 300px;
+            max-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .table-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .table-body {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .data-table th {
+            background-color: #28295d;
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            font-weight: 400;
+            font-size: 24px;
+            border: 2px solid white;
+        }
+
+        .data-table td {
+            padding: 18px 15px;
+            text-align: left;
+            border: 2px solid white;
+            color: #333;
+            font-weight: 400;
+        }
+
+        .data-table tr:nth-child(even) td {
+            background-color: #a8d5d5;
+        }
+
+        .data-table tr:nth-child(odd) td {
+            background-color: #e8e8e8;
+        }
+
+        .table-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            color: #28295d;
+            font-weight: 400;
+        }
+
+        /* Component Content Slide Styles */
+        .component-content-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .component-content-header {
+            background-color: #28295d;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .component-content-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+        }
+
+        .component-content-logo {
+            max-width: 300px;
+            max-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .component-content-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .component-content-body {
+            flex: 1;
+            padding: 80px 80px 120px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .component-content-paragraph {
+            font-size: 28px;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .component-content-body-gray {
+            background-color: #e8e8e8;
+        }
+
+        .component-content-body-teal {
+            background-color: #a8d5d5;
+        }
+
+        .component-content-body-white {
+            background-color: #ffffff;
+        }
+
+        .component-content-body-dark {
+            background-color: #666666;
+        }
+
+        .component-content-body-dark .component-content-paragraph {
+            color: white;
+        }
+
+        .component-content-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            color: #28295d;
+            font-weight: 400;
+        }
+
+        /* Text Box Component Styles */
+        .textbox-slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        .textbox-header {
+            background-color: #28295d;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .textbox-title {
+            font-size: 48px;
+            font-weight: 300;
+            color: white;
+            text-align: left;
+        }
+
+        .textbox-logo {
+            max-width: 300px;
+            max-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .textbox-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .textbox-body {
+            flex: 1;
+            padding: 40px 60px 80px 60px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .textbox-content {
+            border-radius: 8px;
+            overflow: hidden;
+            flex: 1;
+            height: 70vh;
+        }
+
+        .textbox-internal-header {
+            padding: 20px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .textbox-internal-header-blue {
+            background-color: #28295d;
+        }
+
+        .textbox-internal-header-light-blue {
+            background-color: #7c8db8;
+        }
+
+        .textbox-content-body {
+            padding: 30px;
+        }
+
+        .textbox-content-gray {
+            background-color: #e8e8e8;
+        }
+
+        .textbox-content-teal {
+            background-color: #a8d5d5;
+        }
+
+        .textbox-text {
+            font-size: 24px;
+            color: #333;
+            line-height: 1.6;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .textbox-page-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            color: #28295d;
+            font-weight: 400;
+        }
+    </style>
+
+</head>
+<body>
+<div class="slide">
+  <div class="background-image"></div>
+  <div class="overlay"></div>
+  <div class="content">
+    <h1 class="title">Benefits Compliance Update: Mid‑2025</h1>
+    <h2 class="subtitle">In the News • Federal Updates • Hot Topics • Q&amp;A</h2>
+  </div>
+  <div class="brand-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  <div class="page-number">1</div>
+</div>
+
+<div class="agenda-slide">
+  <div class="agenda-background"></div>
+  <div class="agenda-overlay"></div>
+  <div class="agenda-left">
+    <h1 class="agenda-title">Agenda</h1>
+    <div class="agenda-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="agenda-right">
+    <ul class="agenda-items">
+      <li class="agenda-item"><span class="agenda-checkmark">✓</span>In the News</li>
+      <li class="agenda-item nested"><span class="agenda-checkmark">✓</span>MHPAEA: New rules on pause</li>
+      <li class="agenda-item nested"><span class="agenda-checkmark">✓</span>“One, Big, Beautiful Bill” overview</li>
+      <li class="agenda-item nested"><span class="agenda-checkmark">✓</span>Executive Order on drug pricing</li>
+      <li class="agenda-item"><span class="agenda-checkmark">✓</span>Federal Updates</li>
+      <li class="agenda-item nested"><span class="agenda-checkmark">✓</span>2026 HSA/HDHP/EBHRA limits</li>
+      <li class="agenda-item nested"><span class="agenda-checkmark">✓</span>CMS Medicare Part D parameters</li>
+      <li class="agenda-item"><span class="agenda-checkmark">✓</span>Hot Topics</li>
+      <li class="agenda-item nested"><span class="agenda-checkmark">✓</span>RxDC reporting due June 1</li>
+      <li class="agenda-item nested"><span class="agenda-checkmark">✓</span>PCORI fees due July 31</li>
+      <li class="agenda-item"><span class="agenda-checkmark">✓</span>Question of the Month</li>
+      <li class="agenda-item nested"><span class="agenda-checkmark">✓</span>Correcting FSA administrative errors</li>
+    </ul>
+  </div>
+  <div class="page-number">2</div>
+</div>
+
+<div class="transition-slide">
+  <div class="transition-background"></div>
+  <div class="transition-content">
+    <h1 class="transition-title">In the News</h1>
+  </div>
+  <div class="transition-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  <div class="transition-page-number">3</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">MHPAEA: New Parity Rules on Pause</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Background: On May 15, 2025, federal agencies announced they will not enforce the new MHPAEA rules issued Sept. 2024 while litigation (ERIC) is reviewed and potential updates are evaluated.</p>
+    <p class="content-paragraph">• Existing obligations remain: 2013 final MHPAEA rules, CAA 2021 parity provisions, and existing guidance (e.g., FAQs Part 45).</p>
+    <p class="content-paragraph">• Core parity principle: MH/SUD cost-sharing, QTLs, and NQTLs must be no more restrictive than medical/surgical in the same classification.</p>
+    <p class="content-paragraph">• Applies to: Employers with &gt;50 employees sponsoring group health plans covering MH/SUD benefits.</p>
+    <p class="content-paragraph">• Timing: New 2024 rule enforcement paused at least through 2025–2026 (plus 18 months after final court decision per agencies).</p>
+  </div>
+  <div class="content-page-number">4</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">MHPAEA: Go Deeper (What’s Paused vs. Still In Effect)</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Paused (new 2024 Final Rule elements):</p>
+    <p class="content-paragraph">  – Fiduciary certification confirming plan’s comparative analysis review</p>
+    <p class="content-paragraph">  – Expanded NQTL comparative analysis content/requirements</p>
+    <p class="content-paragraph">  – “Meaningful benefits” standard; discriminatory factors/evidentiary standards; new data evaluation requirements</p>
+    <p class="content-paragraph">• Agencies’ statement: No enforcement of new 2024 elements prior to final litigation decision + 18 months; statutory MHPAEA (as amended by CAA 2021) still applies.</p>
+    <p class="content-paragraph">• Still required now: 2013 MHPAEA final rules; CAA 2021 parity obligations; adherence to existing guidance and ability to produce a compliant comparative analysis upon request.</p>
+    <p class="content-paragraph">• High‑risk areas for parity scrutiny: Autism spectrum disorder, eating disorders, medication‑assisted treatment for opioid use disorder.</p>
+  </div>
+  <div class="content-page-number">5</div>
+</div>
+
+<div class="checklist-slide">
+  <div class="checklist-header">
+    <h1 class="checklist-title">MHPAEA: Employer Implications &amp; Actions</h1>
+    <div class="checklist-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="checklist-body">
+    <div class="checklist-content">
+      <h2 class="checklist-content-heading">Action Items</h2>
+      <p class="checklist-item">• Confirm plan compliance with 2013 MHPAEA rules and CAA 2021 requirements.</p>
+      <p class="checklist-item">• Review current comparative analyses for QTLs, FRs, and NQTLs; remediate gaps.</p>
+      <p class="checklist-item">• Engage TPAs/PBMs and legal counsel on high‑risk benefit areas (ASD, eating disorders, MAT for OUD).</p>
+      <p class="checklist-item">• Document parity rationales for prior authorization, step therapy, and network design (apply evidentiary standards consistently).</p>
+      <p class="checklist-item">• Monitor litigation outcome and agency guidance for timing of any new requirements.</p>
+    </div>
+    <div class="checklist-panel">
+      <div class="checklist-panel-content">
+        Focus on operational readiness and defendable comparative analyses even while new elements are paused.
+      </div>
+      <ul class="checklist-list">
+        <li class="checklist-list-item"><span class="checklist-checkbox checked"></span>Update internal parity inventory</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox checked"></span>Coordinate with vendors on NQTL justifications</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Train benefits staff on current MHPAEA standards</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Set monitoring cadence for agency updates</li>
+      </ul>
+    </div>
+  </div>
+  <div class="checklist-page-number">6</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">“One, Big, Beautiful Bill” (House‑passed; in Senate)</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Background: Introduced May 13, 2025 by House Ways &amp; Means; advances extensions of 2017 tax cuts and multiple benefits provisions; passed House; now in Senate.</p>
+    <p class="content-paragraph">• Status: Not law; subject to changes in Senate and conference.</p>
+    <p class="content-paragraph">• Applies to: Employers offering group health plans, HSAs/FSAs/HRAs, PFML/child‑care credits, education assistance, ICHRA programs.</p>
+    <p class="content-paragraph">• Timing: Provisions signal congressional interests for 2026 and beyond.</p>
+  </div>
+  <div class="content-page-number">7</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">Bill: Go Deeper (Key Benefit Provisions)</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• ICHRAs → “CHOICE Arrangements”: 60‑day notice; W‑2 reporting; allow pre‑tax Exchange premiums; 2‑year small employer credit for new arrangements.</p>
+    <p class="content-paragraph">• Tax credits: Updates to PFML credit and employer child‑care credit.</p>
+    <p class="content-paragraph">• Education assistance: Index $5,250 limit; permanently allow student loan repayment reimbursement.</p>
+    <p class="content-paragraph">• HSAs/FSAs highlights:</p>
+    <p class="content-paragraph">  – 60 days to establish HSA; retroactive eligibility to QHDHP start date</p>
+    <p class="content-paragraph">  – HSA‑compatibility expansions (e.g., Part A, certain Exchange plans, limited clinics)</p>
+    <p class="content-paragraph">  – DPC HSA‑compatibility if under capped fee and limited services; DPC fees as §213(d)</p>
+    <p class="content-paragraph">  – Fitness/sports expenses HSA‑reimbursable (annual caps, indexed)</p>
+    <p class="content-paragraph">  – Both spouses can make catch‑ups to same HSA; added HSA contributions with income phase‑outs</p>
+    <p class="content-paragraph">  – FSA/HRA to HSA conversions with lookback conditions; spouse FSA no longer HSA‑disqualifying</p>
+  </div>
+  <div class="content-page-number">8</div>
+</div>
+
+<div class="checklist-slide">
+  <div class="checklist-header">
+    <h1 class="checklist-title">Bill: Employer Implications &amp; Planning Signals</h1>
+    <div class="checklist-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="checklist-body">
+    <div class="checklist-content">
+      <h2 class="checklist-content-heading">Action Items</h2>
+      <p class="checklist-item">• Track Senate activity; prepare for potential 2026 plan design updates.</p>
+      <p class="checklist-item">• Model CHOICE/ICHRA options, tax credit eligibility (non‑ALE), and W‑2 reporting needs.</p>
+      <p class="checklist-item">• Coordinate with payroll/HRIS for possible HSA/FSA changes (eligibility, contributions, DPC, fitness).</p>
+      <p class="checklist-item">• Review education assistance programs for indexing and student loan repayment design.</p>
+      <p class="checklist-item">• Consult legal/tax advisors; confirm cafeteria plan and HSA policy updates if enacted.</p>
+    </div>
+    <div class="checklist-panel">
+      <div class="checklist-panel-content">
+        While not yet law, provisions indicate likely areas of change. Early modeling helps ensure smooth adoption if enacted.
+      </div>
+      <ul class="checklist-list">
+        <li class="checklist-list-item"><span class="checklist-checkbox checked"></span>Engage brokers/TPAs on scenario planning</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Draft conditional plan language</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Budget for system/config changes</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Employee comms plan for 2026</li>
+      </ul>
+    </div>
+  </div>
+  <div class="checklist-page-number">9</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">Executive Order: “Most‑Favored‑Nation” Drug Pricing (May 12, 2025)</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Background: Strategy aims for U.S. drug prices comparable to other developed countries; could reshape pricing and delivery channels.</p>
+    <p class="content-paragraph">• Applies to: All employers sponsoring plans with Rx benefits due to potential downstream pricing and access changes.</p>
+    <p class="content-paragraph">• Status: Initial focus (May 20) on brand drugs without generic/biosimilar competition; legal challenges expected; durable changes likely require Congress.</p>
+  </div>
+  <div class="content-page-number">10</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">Executive Order: Go Deeper (Agency Actions)</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Establish most‑favored‑nation pricing: Announce targeted prices; propose rulemaking; potential FDA pressure (modify/revoke certain approvals).</p>
+    <p class="content-paragraph">• Address anti‑competitive behaviors: Investigate foreign exporters and drug supply chain practices; enforce against anti‑competitive conduct.</p>
+    <p class="content-paragraph">• Direct‑to‑consumer sales: Allow manufacturers agreeing to MFN pricing to sell/ship directly to consumers.</p>
+    <p class="content-paragraph">• Drug importation: Increase flexibility when manufacturers do not align with MFN pricing.</p>
+  </div>
+  <div class="content-page-number">11</div>
+</div>
+
+<div class="checklist-slide">
+  <div class="checklist-header">
+    <h1 class="checklist-title">Executive Order: Employer Implications</h1>
+    <div class="checklist-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="checklist-body">
+    <div class="checklist-content">
+      <h2 class="checklist-content-heading">Action Items</h2>
+      <p class="checklist-item">• Monitor litigation and agency rulemaking timelines impacting Rx unit costs and distribution.</p>
+      <p class="checklist-item">• Ask PBMs about exposure to brand drugs without generic/biosimilar competition.</p>
+      <p class="checklist-item">• Review plan and stop‑loss impacts of potential price shifts or direct‑to‑consumer channels.</p>
+      <p class="checklist-item">• Consider international reference pricing clauses or outcomes‑based strategies where feasible.</p>
+    </div>
+    <div class="checklist-panel">
+      <div class="checklist-panel-content">
+        Changes could be significant but uncertain. Prepare for scenario impacts on formularies, member access, and plan costs.
+      </div>
+      <ul class="checklist-list">
+        <li class="checklist-list-item"><span class="checklist-checkbox checked"></span>Quarterly PBM check‑ins</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Model high‑cost drug exposures</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Member communication templates</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Legal review for DTC/importation</li>
+      </ul>
+    </div>
+  </div>
+  <div class="checklist-page-number">12</div>
+</div>
+
+<div class="transition-alt-slide">
+  <div class="transition-alt-background"></div>
+  <div class="transition-alt-overlay"></div>
+  <div class="transition-alt-content">
+    <h1 class="transition-alt-title">Federal Updates</h1>
+  </div>
+  <div class="transition-alt-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  <div class="transition-alt-page-number">13</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">2026 HSA, HDHP &amp; EBHRA Limits (Rev. Proc. 2025‑19)</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Background: IRS announced 2026 COLAs for HSA, HDHP, EBHRA; all 2025 limits increase except HSA catch‑up ($1,000 unchanged).</p>
+    <p class="content-paragraph">• Applies to: Employers offering HDHP/HSA or EBHRA benefits; payroll/HRIS for 2026 setup.</p>
+    <p class="content-paragraph">• Timing: HSA contribution limits = calendar year; HDHP/EBHRA limits apply to plan years beginning in 2026.</p>
+    <p class="content-paragraph">• Notes: Embedded family deductible must meet minimum family deductible; non‑grandfathered plans have per‑person OOP max requirements.</p>
+  </div>
+  <div class="content-page-number">14</div>
+</div>
+
+<div class="table-slide">
+  <div class="table-header">
+    <h1 class="table-title">Go Deeper: 2025 vs. 2026 Key Limits</h1>
+    <div class="table-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="table-body">
+    <table class="data-table">
+      <tr>
+        <th>Plan Limit</th>
+        <th>2025</th>
+        <th>2026</th>
+      </tr>
+      <tr>
+        <td>HDHP Minimum Deductible (Self‑Only)</td>
+        <td>$1,650</td>
+        <td>$1,700</td>
+      </tr>
+      <tr>
+        <td>HDHP Minimum Deductible (Family)</td>
+        <td>$3,300</td>
+        <td>$3,400</td>
+      </tr>
+      <tr>
+        <td>HDHP OOP Max (Self‑Only)</td>
+        <td>$8,300</td>
+        <td>$8,500</td>
+      </tr>
+      <tr>
+        <td>HDHP OOP Max (Family)</td>
+        <td>$16,600</td>
+        <td>$17,000</td>
+      </tr>
+      <tr>
+        <td>Per‑Person OOP Max (non‑grandfathered)</td>
+        <td>$9,200</td>
+        <td>$10,150</td>
+      </tr>
+      <tr>
+        <td>HSA Contribution (Self‑Only)</td>
+        <td>$4,300</td>
+        <td>$4,400</td>
+      </tr>
+      <tr>
+        <td>HSA Contribution (Family)</td>
+        <td>$8,550</td>
+        <td>$8,750</td>
+      </tr>
+      <tr>
+        <td>HSA Catch‑Up (55+)</td>
+        <td>$1,000</td>
+        <td>$1,000</td>
+      </tr>
+      <tr>
+        <td>Excepted Benefit HRA (Annual Max)</td>
+        <td>$2,150</td>
+        <td>$2,200</td>
+      </tr>
+    </table>
+  </div>
+  <div class="table-page-number">15</div>
+</div>
+
+<div class="checklist-slide">
+  <div class="checklist-header">
+    <h1 class="checklist-title">HSA/HDHP/EBHRA: Employer Actions for 2026</h1>
+    <div class="checklist-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="checklist-body">
+    <div class="checklist-content">
+      <h2 class="checklist-content-heading">Action Items</h2>
+      <p class="checklist-item">• Update 2026 plan documents, SBCs, enrollment materials with new limits.</p>
+      <p class="checklist-item">• Validate embedded deductibles meet minimum family deductible.</p>
+      <p class="checklist-item">• Confirm OOP maximums comply, including per‑person cap for non‑grandfathered plans.</p>
+      <p class="checklist-item">• Configure payroll/HRIS for 2026 HSA contributions and EBHRA caps.</p>
+      <p class="checklist-item">• Communicate changes to employees well ahead of open enrollment.</p>
+    </div>
+    <div class="checklist-panel">
+      <div class="checklist-panel-content">
+        Early configuration and clear communication reduce corrections and member confusion at open enrollment.
+      </div>
+      <ul class="checklist-list">
+        <li class="checklist-list-item"><span class="checklist-checkbox checked"></span>Validate plan setup with TPA</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Test payroll deduction limits</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Update OE decision support tools</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Finalize SBCs/SMMs by deadlines</li>
+      </ul>
+    </div>
+  </div>
+  <div class="checklist-page-number">16</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">CMS: 2026 Medicare Part D Parameters &amp; Methodology Update</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Background: CMS released 2026 Part D benefit parameters and revised simplified creditable coverage determination methodology.</p>
+    <p class="content-paragraph">• Applies to: All employers sponsoring Rx coverage (including COBRA/retiree participants) that must determine and notify creditability.</p>
+    <p class="content-paragraph">• Timing: Revised simplified method available in 2026; current simplified method expected to sunset in 2027.</p>
+  </div>
+  <div class="content-page-number">17</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">Part D: Go Deeper (Key 2026 Changes)</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Deductible increases from $590 → $615; OOP max increases from $2,000 → $2,100.</p>
+    <p class="content-paragraph">• Revised simplified determination adds: reasonable coverage of biologics; removes a deductible test; raises expected plan payment threshold from 60% → 72%.</p>
+    <p class="content-paragraph">• Practical: Aligns with Inflation Reduction Act enhancements; some plans may need actuarial review to confirm creditability.</p>
+  </div>
+  <div class="content-page-number">18</div>
+</div>
+
+<div class="checklist-slide">
+  <div class="checklist-header">
+    <h1 class="checklist-title">Part D: Employer Implications &amp; Next Steps</h1>
+    <div class="checklist-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="checklist-body">
+    <div class="checklist-content">
+      <h2 class="checklist-content-heading">Action Items</h2>
+      <p class="checklist-item">• Work with carriers/PBMs to determine 2026 creditability under revised simplified method.</p>
+      <p class="checklist-item">• Engage actuary if carrier/PBM cannot certify; consider design changes to meet 72% expectation and biologics coverage.</p>
+      <p class="checklist-item">• Prepare and distribute 2026 creditable/non‑creditable notices on time (including COBRA/retirees).</p>
+      <p class="checklist-item">• Plan for 2027: current simplified method expected to be unavailable—ensure future compliance.</p>
+    </div>
+    <div class="checklist-panel">
+      <div class="checklist-panel-content">
+        Early assessment avoids last‑minute notices and helps align plan value with updated CMS expectations.
+      </div>
+      <ul class="checklist-list">
+        <li class="checklist-list-item"><span class="checklist-checkbox checked"></span>Request 2026 creditability from PBM</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Obtain actuarial memo if needed</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Update Rx plan designs as needed</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Finalize Part D notices workflow</li>
+      </ul>
+    </div>
+  </div>
+  <div class="checklist-page-number">19</div>
+</div>
+
+<div class="transition-slide">
+  <div class="transition-background"></div>
+  <div class="transition-content">
+    <h1 class="transition-title">Hot Topics</h1>
+  </div>
+  <div class="transition-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  <div class="transition-page-number">20</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">RxDC Reporting: Due Sunday, June 1, 2025 (CY 2024 Data)</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Background: CAA 2021 §204 requires annual medical/Rx data reporting (RxDC) to federal government.</p>
+    <p class="content-paragraph">• Applies to: All employers sponsoring a group medical plan and Rx benefit (all sizes).</p>
+    <p class="content-paragraph">• Exempt: Excepted benefits (stand‑alone dental/vision), FSAs, HSAs, HRAs, ICHRAs.</p>
+    <p class="content-paragraph">• Process: Carriers/TPAs typically submit most files; employers provide employer/employee premium shares.</p>
+  </div>
+  <div class="content-page-number">21</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">RxDC: Go Deeper (Data &amp; Self‑Funded Calculations)</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Employer inputs: Prior CY employer vs. employee contributions (incl. COBRA) to medical/Rx.</p>
+    <p class="content-paragraph">• Self‑funded “premium equivalent” = actual fixed costs + actual claims (choose incurred or paid for CY; be consistent) − stop‑loss rebates − pharmacy rebates retained by plan; employer paid = premium equivalent − employee contributions.</p>
+    <p class="content-paragraph">• Missed outreach: If employer doesn’t respond, carrier/TPA submits most data; employer must fill gaps via HIOS or engage a vendor.</p>
+    <p class="content-paragraph">• Tip: CMS RxDC webpage provides current instructions/templates.</p>
+  </div>
+  <div class="content-page-number">22</div>
+</div>
+
+<div class="checklist-slide">
+  <div class="checklist-header">
+    <h1 class="checklist-title">RxDC: Employer Actions Now</h1>
+    <div class="checklist-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="checklist-body">
+    <div class="checklist-content">
+      <h2 class="checklist-content-heading">Action Items</h2>
+      <p class="checklist-item">• Confirm who is filing which files (carrier/TPA vs. employer) and internal deadlines.</p>
+      <p class="checklist-item">• Provide contribution splits (employer vs. employee) by carrier deadlines.</p>
+      <p class="checklist-item">• For self‑funded: Calculate premium equivalent per methodology and document approach (incurred vs. paid).</p>
+      <p class="checklist-item">• If gaps remain, submit employer data in HIOS or engage vendor support.</p>
+    </div>
+    <div class="checklist-panel">
+      <div class="checklist-panel-content">
+        This is the 4th cycle—leverage improved carrier/TPA processes, but verify accountability and deadlines.
+      </div>
+      <ul class="checklist-list">
+        <li class="checklist-list-item"><span class="checklist-checkbox checked"></span>Identify responsible contacts</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Archive methodology and proofs</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Set reminder for next cycle prep</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Use CMS resources/checklists</li>
+      </ul>
+    </div>
+  </div>
+  <div class="checklist-page-number">23</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">PCORI Fees: Due July 31, 2025 (Report on Q2 Form 720)</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Background: Annual fee funds Patient‑Centered Outcomes Research Institute; due by July 31 each year on Q2 Form 720.</p>
+    <p class="content-paragraph">• Applies to: Self‑funded medical (incl. level‑funded), HRA paired with fully insured, ICHRA. Carriers pay for fully insured plans.</p>
+    <p class="content-paragraph">• Exempt: Excepted benefits (stand‑alone dental/vision), HSAs, health FSAs.</p>
+    <p class="content-paragraph">• 2025 Form 720 released early; employers can file/pay anytime before July 31.</p>
+  </div>
+  <div class="content-page-number">24</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">PCORI: Go Deeper (Rates &amp; Counting Methods)</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Rates for plan years ending in 2024: $3.22 per covered life (plan years ending before Oct 1, 2024); $3.47 per covered life (ending Oct 1–Dec 31, 2024).</p>
+    <p class="content-paragraph">• Covered lives: Employees + spouses + dependents (HRAs use enrolled employees only).</p>
+    <p class="content-paragraph">• Counting methods: Actual Count; Snapshot; Snapshot Factor (2.35 factor for other‑than‑self‑only); Form 5500 method (if filed by July 31, 2025).</p>
+    <p class="content-paragraph">• Late payments: Use prior‑year forms; IRS may allow reasonable cause appeals if penalized.</p>
+  </div>
+  <div class="content-page-number">25</div>
+</div>
+
+<div class="checklist-slide">
+  <div class="checklist-header">
+    <h1 class="checklist-title">PCORI: Employer Action Checklist</h1>
+    <div class="checklist-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="checklist-body">
+    <div class="checklist-content">
+      <h2 class="checklist-content-heading">Action Items</h2>
+      <p class="checklist-item">• Obtain average covered lives from TPA (or calculate via approved method).</p>
+      <p class="checklist-item">• Complete Q2 Form 720; pay electronically or by voucher (Form 720‑V) by July 31.</p>
+      <p class="checklist-item">• If using Form 5500 method, ensure filing (or extension) timing supports July 31 deadline.</p>
+      <p class="checklist-item">• Retain documentation: method used, counts, calculation, and payment confirmation.</p>
+    </div>
+    <div class="checklist-panel">
+      <div class="checklist-panel-content">
+        Only file Form 720 for Q2 if PCORI is your sole excise tax; no filings are needed for other quarters.
+      </div>
+      <ul class="checklist-list">
+        <li class="checklist-list-item"><span class="checklist-checkbox checked"></span>Confirm plan year end date</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Validate rate ($3.22 vs. $3.47)</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Set internal approval workflow</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Archive proof of payment</li>
+      </ul>
+    </div>
+  </div>
+  <div class="checklist-page-number">26</div>
+</div>
+
+<div class="transition-alt-slide">
+  <div class="transition-alt-background"></div>
+  <div class="transition-alt-overlay"></div>
+  <div class="transition-alt-content">
+    <h1 class="transition-alt-title">Question of the Month</h1>
+  </div>
+  <div class="transition-alt-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  <div class="transition-alt-page-number">27</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">QOTM: Correcting FSA Administrative Errors</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Background: No formal IRS correction rules; unofficial guidance allows correction with “clear and convincing” evidence of employer administrative error.</p>
+    <p class="content-paragraph">• Scenarios: Eligible employee excluded; ineligible employee enrolled; reimbursement of ineligible expenses (error discovered before vs. after plan year end).</p>
+    <p class="content-paragraph">• Applies to: Employers administering health/dependent care FSAs (and vendors/TPAs supporting them).</p>
+  </div>
+  <div class="content-page-number">28</div>
+</div>
+
+<div class="content-slide">
+  <div class="content-header">
+    <h1 class="content-title">FSA Corrections: Go Deeper (Common Fixes)</h1>
+    <div class="content-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="content-body">
+    <p class="content-paragraph">• Eligible but excluded: Consider retro enrollment with prospective salary reductions—or provide taxable compensation to offset after‑tax costs.</p>
+    <p class="content-paragraph">• Ineligible but enrolled: Reverse participation as if never enrolled; reconcile contributions vs. reimbursements; settle amounts owed/owed back (refund taxable).</p>
+    <p class="content-paragraph">• Ineligible reimbursements (error found before year end): Deactivate card; demand repayment; withhold from pay if permitted; offset against future valid claims; if unrecovered, treat as other business indebtedness (W‑2 if forgiven).</p>
+    <p class="content-paragraph">• Ineligible reimbursements (after year end): Treat as business indebtedness; if forgiven, include as taxable wages in year of forgiveness.</p>
+  </div>
+  <div class="content-page-number">29</div>
+</div>
+
+<div class="checklist-slide">
+  <div class="checklist-header">
+    <h1 class="checklist-title">FSA Errors: Employer Action Checklist</h1>
+    <div class="checklist-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  </div>
+  <div class="checklist-body">
+    <div class="checklist-content">
+      <h2 class="checklist-content-heading">Action Items</h2>
+      <p class="checklist-item">• Establish written correction procedures referencing IRS informal guidance and payroll rules.</p>
+      <p class="checklist-item">• Coordinate with TPAs on card deactivation, repayments, offsets, and documentation.</p>
+      <p class="checklist-item">• Confirm state wage withholding permissibility; align SPD/plan language and card terms.</p>
+      <p class="checklist-item">• Determine tax reporting for forgiven indebtedness (Form W‑2) when applicable.</p>
+      <p class="checklist-item">• Maintain evidence of the error and corrective action (“clear and convincing”).</p>
+    </div>
+    <div class="checklist-panel">
+      <div class="checklist-panel-content">
+        Choose the correction path that is administratively feasible and fairest to the employee while maintaining plan compliance.
+      </div>
+      <ul class="checklist-list">
+        <li class="checklist-list-item"><span class="checklist-checkbox checked"></span>Document error and root cause</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Update SOPs to prevent recurrence</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Consult counsel on complex cases</li>
+        <li class="checklist-list-item"><span class="checklist-checkbox-square"></span>Communicate resolution to employee</li>
+      </ul>
+    </div>
+  </div>
+  <div class="checklist-page-number">30</div>
+</div>
+
+<div class="thankyou-slide">
+  <div class="thankyou-background"></div>
+  <div class="thankyou-overlay"></div>
+  <div class="thankyou-content">
+    <h1 class="thankyou-title">THANK YOU!</h1>
+    <h2 class="thankyou-subtitle">Q&amp;A</h2>
+  </div>
+  <div class="thankyou-disclaimer">The material presented here is for general educational purposes only and is subject to change and law, rules, and regulations. It does not provide legal or tax opinions or advice.</div>
+  <div class="thankyou-logo"><img src="/assets/image8.png" alt="BCS Logo"></div>
+  <div class="thankyou-page-number">31</div>
+</div>
+</body>
+</html>

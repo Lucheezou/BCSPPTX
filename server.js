@@ -392,6 +392,16 @@ ${combinedSlides}
   }
 });
 
+// Helper function to calculate dynamic font size for slide headers
+function getHeaderFontSize(title) {
+  const length = title.length;
+  if (length > 80) return 20;
+  if (length > 60) return 22;
+  if (length > 45) return 24;
+  if (length > 35) return 26;
+  return 28;
+}
+
 // Helper function to validate and fix color values for PptxGenJS
 function validateColor(color, defaultColor = '000000') {
   // Handle any data type - convert to string first for safety
@@ -525,6 +535,8 @@ Extract and return ONLY a JSON object with this structure, analyzing ALL slide c
       "type": "checklist",
       "title": "checklist title",
       "content": ["item 1", "item 2"],
+      "checklist_heading": "Action Items",
+      "checklist_panel_text": "Brief paragraph text before checklist",
       "checklist_items": [{"text": "item", "checked": true}]
     },
     {
@@ -565,22 +577,27 @@ CRITICAL EXTRACTION RULES:
 - Extract actual content, NOT placeholder text
 - For briefing_header: Always format as "BCS Monthly Briefing: [Month Day, Year]" with current date
 
-BULLET FORMATTING (MANDATORY):
-- ALWAYS preserve bullet points (•) and sub-bullets (◦) in content
-- Look for <li>, <ul>, or bullet characters in HTML
-- If content is in paragraphs, convert to bulleted format with • for main points
-- Extract as ["• Point 1", "  ◦ Sub-point 1a", "• Point 2"] format
-- NEVER return plain paragraphs - ALWAYS use bullets
+BULLET FORMATTING (MANDATORY - NESTED LIST DETECTION):
+- ALWAYS preserve bullet hierarchies from nested <ul> lists in HTML
+- Detect nested lists: parent <li> contains nested <ul> with child <li> items
+- For parent bullets: NO prefix, just the text (e.g., "Background")
+- For sub-bullets (nested <ul><li>): Add DASH PREFIX "- " at start (e.g., "- The ACA has become...")
+- Extract format example: ["Background", "- Sub-point 1", "- Sub-point 2", "Next Topic", "- Another sub"]
+- NEVER use • or ◦ characters - use DASH for sub-bullets only
+- Parent bullets have NO prefix at all
 
 AGENDA FORMATTING (CRITICAL - MANDATORY):
 - MUST preserve hierarchical structure with TWO-SPACE indentation for nested items
-- Main items: NO spaces at start, e.g., "Main Topic"
+- For items like "Hot Topics: Title" followed by nested items:
+  * Extract parent as just the category: "Hot Topics"
+  * Extract nested item with TWO SPACES: "  1094/1095 IRS e-filing..."
+- Main items: NO spaces at start, e.g., "In the News"
 - Sub-items: EXACTLY TWO SPACES at start, e.g., "  Sub-topic"
-- Detect nested items: <li class="agenda-item nested"> OR indented <li>
-- Extract format: ["Main item 1", "  Sub-item 1a", "  Sub-item 1b", "Main item 2"]
+- Detect nested items: <li class="agenda-item nested"> has class "nested"
+- If an item has a colon and is followed by a nested item, split at colon and use first part as parent
+- Extract format: ["In the News", "Hot Topics", "  ACA Reporting Deadlines", "Federal Update"]
 - DO NOT trim() or strip() leading spaces from sub-items
 - The two-space prefix "  " is REQUIRED for proper PPT indentation
-- NEVER remove leading spaces from agenda items
 
 SLIDE TYPE DETECTION:
 - "Go Deeper" in title or heading → type: "go_deeper"
@@ -595,7 +612,11 @@ SLIDE TYPE DETECTION:
 
 OTHER RULES:
 - For tables: extract th elements as headers, td elements as row data
-- For checklists: extract as checklist_items array with text and checked status
+- For checklists:
+  * Extract checklist_heading from h2.checklist-content-heading (e.g., "Action Items")
+  * Extract checklist_panel_text from div.checklist-panel-content (brief paragraph before checklist)
+  * Extract checklist_items array with text and checked status from ul.checklist-list li elements
+  * Extract main content from div.checklist-content div.checklist-item elements
 - For textboxes: detect gray/teal colors and extract header/content pairs
 - IMPORTANT: Employer implications should ALWAYS be type: "checklist" (not textbox)
 - Identify article categories and use appropriate transition slide types
@@ -963,7 +984,7 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
         const briefingHeader = slideData.briefing_header || `BCS Monthly Briefing: ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
         slide.addText(briefingHeader, {
           x: 0.5, y: 2.0, w: 8.5, h: 0.8,
-          fontSize: 42, color: validateColor('FFFFFF'), fontFace: 'Lato',
+          fontSize: 32, color: validateColor('FFFFFF'), fontFace: 'Lato',
           align: 'left', valign: 'middle', bold: false
         });
 
@@ -971,7 +992,7 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
         if (slideData.title) {
           slide.addText(slideData.title, {
             x: 0.5, y: 3.0, w: 8.5, h: 0.8,
-            fontSize: 32, color: validateColor('FFFFFF'), fontFace: 'Lato',
+            fontSize: 24, color: validateColor('FFFFFF'), fontFace: 'Lato',
             align: 'left', valign: 'middle', bold: false
           });
         }
@@ -1014,10 +1035,15 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           fill: { color: 'FFFFFF', transparency: 0 }
         });
 
-        // Right side - agenda items with checkmarks (start from top)
-        let yPos = 0.3;  // Start from very top of right panel
-        const maxItems = Math.min(slideData.items.length, 12); // Increased to 12 items
-        const lineHeight = 0.42;  // Compact spacing to fit more items
+        // Right side - agenda items with checkmarks - centered vertically with proper spacing
+        const maxItems = Math.min(slideData.items.length, 12);
+        const baseLineHeight = 0.5;  // Increased spacing for wrapped items
+
+        // Calculate total height needed for all items
+        const totalContentHeight = maxItems * baseLineHeight;
+
+        // Center vertically: start position = (slide height - content height) / 2
+        let yPos = (5.625 - totalContentHeight) / 2;
 
         for (let j = 0; j < maxItems; j++) {
           const item = slideData.items[j];
@@ -1027,24 +1053,25 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           const isSubBullet = item.startsWith('  ') || item.startsWith('◦') || item.startsWith('- ');
           const indent = isSubBullet ? 0.3 : 0;
 
-          // Add green checkmark bullet (smaller)
+          // Add green checkmark bullet
           slide.addText('✓', {
             x: 4.2 + indent, y: yPos, w: 0.3, h: 0.4,
-            fontSize: isSubBullet ? 16 : 18,  // Reduced from 20/24
+            fontSize: isSubBullet ? 16 : 18,
             color: validateColor('7CB342'), fontFace: 'Lato',
-            align: 'center', bold: true, valign: 'middle'
+            align: 'center', bold: true, valign: 'top'
           });
 
-          // Add agenda item text with smaller font
-          const safeItem = (item || '').toString().trim().replace(/^[◦\-]\s*/, '');
-          const itemText = safeItem.length > 65 ? safeItem.substring(0, 62) + '...' : safeItem;
-          slide.addText(itemText, {
-            x: 4.6 + indent, y: yPos, w: 5.0 - indent, h: 0.4,
-            fontSize: isSubBullet ? 13 : 15,  // Reduced from 16/18
+          // Add agenda item text with wrapping and proper height for multi-line
+          const safeItem = (item || '').toString().trim().replace(/^[◦\-\s]*/, '');
+          slide.addText(safeItem, {
+            x: 4.6 + indent, y: yPos, w: 5.0 - indent, h: baseLineHeight - 0.05,
+            fontSize: isSubBullet ? 13 : 15,
             color: validateColor('28295D'), fontFace: 'Lato',
-            align: 'left', valign: 'middle', bold: false
+            align: 'left', valign: 'top', bold: false,
+            wrap: true,
+            lineSpacing: 16
           });
-          yPos += lineHeight;
+          yPos += baseLineHeight;
         }
 
         // Logo in lower left with less padding (moved more to the left)
@@ -1076,12 +1103,13 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           fill: { color: '28295D' }
         });
 
-        // Content title - truncate if too long
-        const titleText = slideData.title.length > 80 ? slideData.title.substring(0, 77) + '...' : slideData.title;
+        // Content title with dynamic font sizing
+        const titleText = slideData.title;
+        const headerFontSize = getHeaderFontSize(titleText);
         slide.addText(titleText, {
           x: 0.5, y: 0.15, w: 7, h: 0.8,
-          fontSize: 28, color: validateColor('FFFFFF'), fontFace: 'Lato',
-          align: 'left', bold: false, valign: 'middle'
+          fontSize: headerFontSize, color: validateColor('FFFFFF'), fontFace: 'Lato',
+          align: 'left', bold: false, valign: 'middle', wrap: true
         });
 
         // Add brand logo in header (2:1 aspect ratio)
@@ -1092,112 +1120,65 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
 
 
 
-        // Content as bulleted lists - optimized for live presenting
+        // Content as bulleted lists - add each bullet separately for proper rendering
         const safeContent = slideData.content && Array.isArray(slideData.content) ? slideData.content : ['No content available'];
 
-        // Remove bullet characters - PPT will add them automatically
-        const bulletContent = safeContent.map(item => {
-          return item.trim().replace(/^[•◦]\s*/, '');
-        });
+        // Add bullets directly - calculate height based on text length for wrapping
+        let yPos = 1.5;
+        const maxYPos = 5.0; // Don't go below this
 
-        const allContent = bulletContent.join('\n');
+        for (let j = 0; j < safeContent.length && yPos < maxYPos; j++) {
+          const item = safeContent[j];
+          const trimmed = item.trim();
+          const isSubBullet = trimmed.startsWith('-');
+          const text = isSubBullet ? trimmed.substring(1).trim() : trimmed;
 
-        // More conservative character limit for better formatting
-        if (allContent.length > 600) {
-          // Split content into smaller, manageable chunks
-          const chunks = [];
-          let currentChunk = '';
+          const indent = isSubBullet ? 0.4 : 0;
+          const bulletSymbol = isSubBullet ? '◦' : '•';
 
-          for (const bullet of bulletContent) {
-            const testChunk = currentChunk + (currentChunk ? '\n' : '') + bullet;
-            if (testChunk.length > 600 && currentChunk.length > 0) {
-              chunks.push(currentChunk.trim());
-              currentChunk = bullet;
-            } else {
-              currentChunk = testChunk;
-            }
-          }
+          // Estimate height based on text length (rough calculation)
+          // Assume ~100 chars per line at 14pt font with given width
+          const textWidth = 8.5 - indent;
+          const charsPerLine = textWidth * 12; // Rough estimate: 12 chars per inch
+          const numLines = Math.ceil(text.length / charsPerLine);
+          const itemHeight = Math.max(0.35, numLines * 0.25); // Min 0.35", ~0.25" per line
 
-          if (currentChunk.trim()) {
-            chunks.push(currentChunk.trim());
-          }
+          // Stop if this item won't fit
+          if (yPos + itemHeight > maxYPos) break;
 
-          // Add first chunk to current slide as bulleted list
-          slide.addText(chunks[0], {
-            x: 0.6, y: 1.5, w: 8.8, h: 3.5,
+          // Add bullet symbol
+          slide.addText(bulletSymbol, {
+            x: 0.6 + indent, y: yPos, w: 0.2, h: 0.3,
+            fontSize: isSubBullet ? 12 : 14,
+            color: validateColor('333333'), fontFace: 'Lato',
+            align: 'left', valign: 'top'
+          });
+
+          // Add text with calculated height
+          slide.addText(text, {
+            x: 0.9 + indent, y: yPos, w: 8.5 - indent, h: itemHeight,
             fontSize: 14, color: validateColor('333333'), fontFace: 'Lato',
-            align: 'left', lineSpacing: 20, valign: 'top',
-            wrap: true,
-            bullet: true  // Use bullet points only, no numbering
+            align: 'left', valign: 'top', wrap: true, lineSpacing: 18
           });
 
-          // Add page number
-          slide.addText(`${i + 1}`, {
-            x: 9, y: 5.1, w: 0.8, h: 0.4,
-            fontSize: 18, color: validateColor('28295D'), fontFace: 'Lato',
-            align: 'center', valign: 'middle'
-          });
-
-          // Create additional slides for remaining chunks
-          for (let c = 1; c < chunks.length; c++) {
-            const contSlide = pptx.addSlide();
-            contSlide.background = { color: 'F5F5F5' };
-
-            contSlide.addShape(pptx.ShapeType.rect, {
-              x: 0, y: 0, w: 10, h: 1.1,
-              fill: { color: '28295D' }
-            });
-
-            const contTitleText = titleText.length > 65 ? titleText.substring(0, 62) + '...' : titleText;
-            contSlide.addText(`${contTitleText} (cont.)`, {
-              x: 0.5, y: 0.15, w: 7, h: 0.8,
-              fontSize: 28, color: validateColor('FFFFFF'), fontFace: 'Lato',
-              align: 'left', bold: false, valign: 'middle'
-            });
-
-            // Add brand logo to continuation slide (2:1 aspect ratio)
-            contSlide.addImage({
-              path: 'public/assets/image8.png',
-              x: 8.5, y: 0.2, w: 1.2, h: 0.6
-            });
-
-            contSlide.addText(chunks[c], {
-              x: 0.6, y: 1.5, w: 8.8, h: 3.5,
-              fontSize: 14, color: validateColor('333333'), fontFace: 'Lato',
-              align: 'left', lineSpacing: 20, valign: 'top',
-              wrap: true,
-              bullet: true  // Use bullet points only, no numbering
-            });
-
-            contSlide.addText(`${i + 1}-${c + 1}`, {
-              x: 9, y: 5.1, w: 0.8, h: 0.4,
-              fontSize: 18, color: validateColor('28295D'), fontFace: 'Lato',
-              align: 'center', valign: 'middle'
-            });
-          }
-        } else {
-          // Content fits on one slide as bulleted list
-          slide.addText(allContent, {
-            x: 0.6, y: 1.5, w: 8.8, h: 3.5,
-            fontSize: 14, color: validateColor('333333'), fontFace: 'Lato',
-            align: 'left', lineSpacing: 20, valign: 'top',
-            wrap: true,
-            bullet: true  // Use bullet points only, no numbering
-          });
-
-          // Add page number
-          slide.addText(`${i + 1}`, {
-            x: 9, y: 5.1, w: 0.8, h: 0.4,
-            fontSize: 18, color: validateColor('28295D'), fontFace: 'Lato',
-            align: 'center', valign: 'middle'
-          });
+          yPos += itemHeight + 0.05; // Add small gap between items
         }
+
+        // Add page number
+        slide.addText(`${i + 1}`, {
+          x: 9, y: 5.1, w: 0.8, h: 0.4,
+          fontSize: 18, color: validateColor('28295D'), fontFace: 'Lato',
+          align: 'center', valign: 'middle'
+        });
 
         console.log(`Created content slide: "${slideData.title}" with ${slideData.content.length} paragraphs`);
 
       } else if (slideData.type === 'go_deeper') {
+        // Go Deeper slide - add each bullet separately for proper rendering
+        const titleText = slideData.title;
+        const safeContent = slideData.content && Array.isArray(slideData.content) ? slideData.content : ['No content available'];
+
         const slide = pptx.addSlide();
-        // Go Deeper slide - dedicated slide for nuance and context
         slide.background = { color: 'F5F5F5' };
 
         // Purple header
@@ -1206,12 +1187,12 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           fill: { color: '28295D' }
         });
 
-        // Go Deeper title
-        const titleText = slideData.title.length > 80 ? slideData.title.substring(0, 77) + '...' : slideData.title;
+        // Go Deeper title with dynamic font
+        const headerFontSize = getHeaderFontSize(titleText);
         slide.addText(titleText, {
           x: 0.5, y: 0.15, w: 7, h: 0.8,
-          fontSize: 28, color: validateColor('FFFFFF'), fontFace: 'Lato',
-          align: 'left', bold: false, valign: 'middle'
+          fontSize: headerFontSize, color: validateColor('FFFFFF'), fontFace: 'Lato',
+          align: 'left', bold: false, valign: 'middle', wrap: true
         });
 
         // Add brand logo in header (2:1 aspect ratio)
@@ -1232,23 +1213,46 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           align: 'left', bold: true, valign: 'middle'
         });
 
-        // Content as bulleted lists for nuance and context
-        const safeContent = slideData.content && Array.isArray(slideData.content) ? slideData.content : ['No content available'];
+        // Add bullets directly - calculate height based on text length for wrapping
+        let yPos = 2.0;
+        const maxYPos = 5.0; // Don't go below this
 
-        // Remove bullet characters - PPT will add them automatically
-        const bulletContent = safeContent.map(item => {
-          return item.trim().replace(/^[•◦]\s*/, '');
-        });
+        for (let j = 0; j < safeContent.length && yPos < maxYPos; j++) {
+          const item = safeContent[j];
+          const trimmed = item.trim();
+          const isSubBullet = trimmed.startsWith('-');
+          const text = isSubBullet ? trimmed.substring(1).trim() : trimmed;
 
-        const allContent = bulletContent.join('\n');
+          const indent = isSubBullet ? 0.4 : 0;
+          const bulletSymbol = isSubBullet ? '◦' : '•';
 
-        slide.addText(allContent, {
-          x: 0.6, y: 2.0, w: 8.8, h: 3.0,
-          fontSize: 13, color: validateColor('333333'), fontFace: 'Lato',
-          align: 'left', lineSpacing: 18, valign: 'top',
-          wrap: true,
-          bullet: true  // Use bullet points only, no numbering
-        });
+          // Estimate height based on text length (rough calculation)
+          // Assume ~100 chars per line at 13pt font with given width
+          const textWidth = 8.5 - indent;
+          const charsPerLine = textWidth * 12; // Rough estimate: 12 chars per inch
+          const numLines = Math.ceil(text.length / charsPerLine);
+          const itemHeight = Math.max(0.35, numLines * 0.25); // Min 0.35", ~0.25" per line
+
+          // Stop if this item won't fit
+          if (yPos + itemHeight > maxYPos) break;
+
+          // Add bullet symbol
+          slide.addText(bulletSymbol, {
+            x: 0.6 + indent, y: yPos, w: 0.2, h: 0.3,
+            fontSize: isSubBullet ? 11 : 13,
+            color: validateColor('333333'), fontFace: 'Lato',
+            align: 'left', valign: 'top'
+          });
+
+          // Add text with calculated height
+          slide.addText(text, {
+            x: 0.9 + indent, y: yPos, w: 8.5 - indent, h: itemHeight,
+            fontSize: 13, color: validateColor('333333'), fontFace: 'Lato',
+            align: 'left', valign: 'top', wrap: true, lineSpacing: 16
+          });
+
+          yPos += itemHeight + 0.05; // Add small gap between items
+        }
 
         // Add page number
         slide.addText(`${i + 1}`, {
@@ -1260,115 +1264,182 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
         console.log(`Created Go Deeper slide: "${slideData.title}"`);
 
       } else if (slideData.type === 'table') {
-        const slide = pptx.addSlide();
-        // Table slide
-        slide.background = { color: 'F5F5F5' };
-
-
-        // Purple header
-        slide.addShape(pptx.ShapeType.rect, {
-          x: 0, y: 0, w: 10, h: 1.1,
-          fill: { color: '28295D' }
-        });
-
-        // Table title
-        slide.addText(slideData.title || 'Table', {
-          x: 0.5, y: 0.15, w: 7, h: 0.8,
-          fontSize: 28, color: validateColor('FFFFFF'), fontFace: 'Lato',
-          align: 'left', bold: false, valign: 'middle'
-        });
-
-        // Add brand logo in header (2:1 aspect ratio)
-        slide.addImage({
-          path: 'public/assets/image8.png',
-          x: 8.5, y: 0.2, w: 1.2, h: 0.6
-        });
-
-        // Create table with auto-sizing to accommodate data
+        // Dynamic table creation with smart sizing and splitting
         if (slideData.headers && slideData.rows) {
-          const tableData = [slideData.headers, ...slideData.rows];
+          const headers = slideData.headers;
+          const rows = slideData.rows;
+          const numCols = headers.length;
+          const totalRows = rows.length;
 
-          // Auto-calculate optimal dimensions
-          const numCols = tableData[0].length;
-          const numRows = tableData.length;
-
-          // Calculate column widths based on content length for better fit
+          // Calculate content metrics for intelligent sizing
           const columnWidths = new Array(numCols).fill(0);
-          tableData.forEach(row => {
+          const allData = [headers, ...rows];
+
+          allData.forEach(row => {
             row.forEach((cell, colIndex) => {
               const cellLength = String(cell || '').length;
               columnWidths[colIndex] = Math.max(columnWidths[colIndex], cellLength);
             });
           });
 
-          // Normalize column widths to fit within available space
+          // Normalize column widths
           const totalContentWidth = columnWidths.reduce((a, b) => a + b, 0);
           const availableWidth = 9.2;
           const normalizedWidths = columnWidths.map(w => (w / totalContentWidth) * availableWidth);
 
-          // Auto-calculate row height based on number of rows
+          // Determine optimal font sizes based on content
+          const maxContentLength = Math.max(...columnWidths);
+          let baseFontSize = 10;
+          let headerFontSize = 12;
+
+          if (maxContentLength > 80) {
+            baseFontSize = 7;
+            headerFontSize = 9;
+          } else if (maxContentLength > 50) {
+            baseFontSize = 8;
+            headerFontSize = 10;
+          } else if (maxContentLength > 30) {
+            baseFontSize = 9;
+            headerFontSize = 11;
+          }
+
+          // Calculate how many rows fit per slide (max available height / min row height)
           const availableHeight = 3.8;
-          const rowHeight = Math.max(0.4, Math.min(0.6, availableHeight / numRows));
+          const minRowHeight = 0.35;
+          const maxRowHeight = 0.6;
 
-          const startY = 1.4;
-          let currentX = 0.4;
+          // Dynamic row height based on number of rows and content
+          let rowHeight = Math.max(minRowHeight, Math.min(maxRowHeight, availableHeight / (totalRows + 1)));
 
-          tableData.forEach((row, rowIndex) => {
-            currentX = 0.4; // Reset X for each row
-            row.forEach((cell, colIndex) => {
-              const colWidth = normalizedWidths[colIndex];
-              const y = startY + (rowIndex * rowHeight);
+          // Adjust row height if content is very long (needs wrapping)
+          if (maxContentLength > 50) {
+            rowHeight = Math.max(rowHeight, 0.45);
+          }
 
-              // Determine colors based on row
-              let fillColor, textColor;
-              if (rowIndex === 0) {
-                // Header row
-                fillColor = validateColor('28295D');
-                textColor = validateColor('FFFFFF');
-              } else if (rowIndex % 2 === 1) {
-                // Odd data rows (1, 3, 5...) - teal
-                fillColor = validateColor('A8D5D5');
-                textColor = validateColor('333333');
-              } else {
-                // Even data rows (2, 4, 6...) - light gray
-                fillColor = validateColor('E8E8E8');
-                textColor = validateColor('333333');
-              }
+          // Calculate rows per slide
+          const rowsPerSlide = Math.floor(availableHeight / rowHeight) - 1; // -1 for header
+          const numTableSlides = Math.ceil(totalRows / rowsPerSlide);
 
-              // Add cell background
-              slide.addShape(pptx.ShapeType.rect, {
-                x: currentX, y: y, w: colWidth, h: rowHeight,
-                fill: { color: fillColor },
-                line: { color: validateColor('FFFFFF'), width: 2 }
-              });
+          console.log(`Table split into ${numTableSlides} slides (${rowsPerSlide} rows per slide)`);
 
-              // Add cell text with better padding and wrapping - auto-size font
-              const fontSize = rowIndex === 0 ? Math.min(12, 10 + (0.1 * colWidth)) : Math.min(10, 8 + (0.1 * colWidth));
-              slide.addText(String(cell || ''), {
-                x: currentX + 0.05, y: y + 0.05, w: colWidth - 0.1, h: rowHeight - 0.1,
-                fontSize: fontSize,
-                color: textColor,
-                fontFace: 'Lato',
-                align: rowIndex === 0 ? 'center' : 'left',
-                valign: 'middle',
-                bold: rowIndex === 0,
-                wrap: true,
-                lineSpacing: 12
-              });
+          // Create table slides
+          for (let slideNum = 0; slideNum < numTableSlides; slideNum++) {
+            const slide = pptx.addSlide();
+            slide.background = { color: 'F5F5F5' };
 
-              currentX += colWidth; // Move to next column
+            // Purple header
+            slide.addShape(pptx.ShapeType.rect, {
+              x: 0, y: 0, w: 10, h: 1.1,
+              fill: { color: '28295D' }
             });
-          });
+
+            // Table title with continuation indicator and dynamic font
+            const titleSuffix = numTableSlides > 1 ? ` (${slideNum + 1}/${numTableSlides})` : '';
+            const tableTitle = (slideData.title || 'Table') + titleSuffix;
+            const headerFontSize = getHeaderFontSize(tableTitle);
+            slide.addText(tableTitle, {
+              x: 0.5, y: 0.15, w: 7, h: 0.8,
+              fontSize: headerFontSize, color: validateColor('FFFFFF'), fontFace: 'Lato',
+              align: 'left', bold: false, valign: 'middle', wrap: true
+            });
+
+            // Add brand logo in header (2:1 aspect ratio)
+            slide.addImage({
+              path: 'public/assets/image8.png',
+              x: 8.5, y: 0.2, w: 1.2, h: 0.6
+            });
+
+            // Determine which rows to display on this slide
+            const startRow = slideNum * rowsPerSlide;
+            const endRow = Math.min(startRow + rowsPerSlide, totalRows);
+            const slideRows = rows.slice(startRow, endRow);
+
+            // Create header + data for this slide
+            const tableData = [headers, ...slideRows];
+            const startY = 1.4;
+            let currentX = 0.4;
+
+            tableData.forEach((row, rowIndex) => {
+              currentX = 0.4; // Reset X for each row
+              row.forEach((cell, colIndex) => {
+                const colWidth = normalizedWidths[colIndex];
+                const y = startY + (rowIndex * rowHeight);
+
+                // Determine colors based on row
+                let fillColor, textColor;
+                if (rowIndex === 0) {
+                  // Header row
+                  fillColor = validateColor('28295D');
+                  textColor = validateColor('FFFFFF');
+                } else if (rowIndex % 2 === 1) {
+                  // Odd data rows - teal
+                  fillColor = validateColor('A8D5D5');
+                  textColor = validateColor('333333');
+                } else {
+                  // Even data rows - light gray
+                  fillColor = validateColor('E8E8E8');
+                  textColor = validateColor('333333');
+                }
+
+                // Add cell background
+                slide.addShape(pptx.ShapeType.rect, {
+                  x: currentX, y: y, w: colWidth, h: rowHeight,
+                  fill: { color: fillColor },
+                  line: { color: validateColor('FFFFFF'), width: 2 }
+                });
+
+                // Calculate font size dynamically per cell
+                const cellContent = String(cell || '');
+                let cellFontSize = rowIndex === 0 ? headerFontSize : baseFontSize;
+
+                // For header cells, adjust font based on BOTH cell length AND column width
+                if (rowIndex === 0) {
+                  // Calculate optimal header font size based on content and width
+                  const charsPerInch = 8; // Rough estimate for readability
+                  const maxChars = colWidth * charsPerInch;
+
+                  if (cellContent.length > maxChars) {
+                    // Content won't fit comfortably, reduce font
+                    const ratio = maxChars / cellContent.length;
+                    cellFontSize = Math.max(7, Math.floor(headerFontSize * ratio));
+                  } else if (cellContent.length > 25) {
+                    // Medium length header
+                    cellFontSize = Math.min(headerFontSize, 10);
+                  }
+                }
+
+                // Further reduce font if cell content is very long (for data cells)
+                if (rowIndex > 0 && cellContent.length > 60) {
+                  cellFontSize = Math.max(6, cellFontSize - 1);
+                }
+
+                // Add cell text with dynamic sizing
+                slide.addText(cellContent, {
+                  x: currentX + 0.05, y: y + 0.05, w: colWidth - 0.1, h: rowHeight - 0.1,
+                  fontSize: cellFontSize,
+                  color: textColor,
+                  fontFace: 'Lato',
+                  align: rowIndex === 0 ? 'center' : 'left',
+                  valign: 'middle',
+                  bold: rowIndex === 0,
+                  wrap: true,
+                  lineSpacing: 10
+                });
+
+                currentX += colWidth;
+              });
+            });
+
+            // Add page number
+            slide.addText(`${i + 1}${slideNum > 0 ? '-' + (slideNum + 1) : ''}`, {
+              x: 9, y: 5.1, w: 0.8, h: 0.4,
+              fontSize: 18, color: validateColor('28295D'), fontFace: 'Lato',
+              align: 'center', valign: 'middle'
+            });
+
+            console.log(`Created table slide ${slideNum + 1}/${numTableSlides}: "${slideData.title}" with ${slideRows.length} rows`);
+          }
         }
-
-        // Add page number
-        slide.addText(`${i + 1}`, {
-          x: 9, y: 5.1, w: 0.8, h: 0.4,
-          fontSize: 18, color: validateColor('28295D'), fontFace: 'Lato',
-          align: 'center', valign: 'middle'
-        });
-
-        console.log(`Created table slide: "${slideData.title}"`);
 
       } else if (slideData.type === 'statistics') {
         const slide = pptx.addSlide();
@@ -1381,11 +1452,13 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           fill: { color: '28295D' }
         });
 
-        // Statistics title
-        slide.addText(slideData.title || 'Slide Title', {
+        // Statistics title with dynamic font
+        const statTitle = slideData.title || 'Slide Title';
+        const headerFontSize = getHeaderFontSize(statTitle);
+        slide.addText(statTitle, {
           x: 0.5, y: 0.15, w: 7, h: 0.8,
-          fontSize: 28, color: validateColor('FFFFFF'), fontFace: 'Lato',
-          align: 'left', bold: false, valign: 'middle'
+          fontSize: headerFontSize, color: validateColor('FFFFFF'), fontFace: 'Lato',
+          align: 'left', bold: false, valign: 'middle', wrap: true
         });
 
         // Add brand logo in header (2:1 aspect ratio)
@@ -1454,11 +1527,13 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
         // Checklist slide
         slide.background = { color: '28295D' };
 
-        // Header
-        slide.addText(slideData.title || 'Slide Title', {
+        // Header with dynamic font
+        const checklistTitle = slideData.title || 'Slide Title';
+        const headerFontSize = getHeaderFontSize(checklistTitle);
+        slide.addText(checklistTitle, {
           x: 0.5, y: 0.15, w: 7, h: 0.8,
-          fontSize: 28, color: validateColor('FFFFFF'), fontFace: 'Lato',
-          align: 'left', bold: false, valign: 'middle'
+          fontSize: headerFontSize, color: validateColor('FFFFFF'), fontFace: 'Lato',
+          align: 'left', bold: false, valign: 'middle', wrap: true
         });
 
         // Add brand logo in header (2:1 aspect ratio)
@@ -1467,49 +1542,84 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           x: 8.5, y: 0.2, w: 1.2, h: 0.6
         });
 
-        // Left content area - prevent text overflow
+        // Left content area with heading
+        let contentStartY = 1.3;
+
+        // Add checklist heading if present (e.g., "Action Items")
+        if (slideData.checklist_heading) {
+          slide.addText(slideData.checklist_heading, {
+            x: 0.5, y: 1.3, w: 6.7, h: 0.4,
+            fontSize: 18, color: validateColor('FFFFFF'), fontFace: 'Lato',
+            align: 'left', bold: true, valign: 'middle'
+          });
+          contentStartY = 1.8;
+        }
+
+        // Left content area with bullets - prevent text overflow
         if (slideData.content && slideData.content.length > 0) {
           const safeChecklist = Array.isArray(slideData.content) ? slideData.content : [slideData.content];
-          const contentText = safeChecklist.join('\n\n');
+
+          // Process content to ensure bullets are present
+          const bulletContent = safeChecklist.map(item => {
+            const trimmed = item.trim();
+            // Remove existing bullet/number if present
+            const cleaned = trimmed.replace(/^[\d\)•◦\-]\s*/, '');
+            return cleaned;
+          });
+
+          const contentText = bulletContent.join('\n');
           // Truncate if too long to prevent overflow
           const maxLength = 500;
           const displayText = contentText.length > maxLength ? contentText.substring(0, maxLength) + '...' : contentText;
 
+          const contentHeight = 5.1 - contentStartY - 0.3;
           slide.addText(displayText, {
-            x: 0.5, y: 1.3, w: 6.7, h: 3.8,
+            x: 0.5, y: contentStartY, w: 6.7, h: contentHeight,
             fontSize: 14, color: validateColor('FFFFFF'), fontFace: 'Lato',
-            align: 'left', valign: 'top', wrap: true, lineSpacing: 18
+            align: 'left', valign: 'top', wrap: true, lineSpacing: 18,
+            bullet: true  // Add bullets to checklist content
           });
         }
 
         // Right checklist panel - full coverage from header to bottom, no padding
         slide.addShape(pptx.ShapeType.rect, {
-          x: 8.0, y: 1.1, w: 2.0, h: 4.525,
+          x: 7.5, y: 1.1, w: 2.5, h: 4.525,
           fill: { color: 'FFFFFF' }
         });
 
+        let checkY = 1.3;
+
+        // Add brief paragraph before checklist if present
+        if (slideData.checklist_panel_text) {
+          slide.addText(slideData.checklist_panel_text, {
+            x: 7.6, y: checkY, w: 2.3, h: 1.0,
+            fontSize: 8, color: validateColor('333333'), fontFace: 'Lato',
+            align: 'left', valign: 'top', wrap: true, lineSpacing: 12
+          });
+          checkY += 1.1; // Move down after paragraph
+        }
+
         // Checklist items
         if (slideData.checklist_items && slideData.checklist_items.length > 0) {
-          let checkY = 1.2;
-          for (const item of slideData.checklist_items.slice(0, 6)) {
+          for (const item of slideData.checklist_items.slice(0, 8)) {
             // Checkbox or checkmark
             const symbol = item.checked ? '✓' : '☐';
             const symbolColor = validateColor(item.checked ? '7CB342' : '999999');
 
             slide.addText(symbol, {
-              x: 8.0, y: checkY, w: 0.3, h: 0.3,
+              x: 7.6, y: checkY, w: 0.25, h: 0.25,
               fontSize: 10, color: symbolColor, fontFace: 'Lato',
               align: 'center', valign: 'middle'
             });
 
             // Item text
             slide.addText(item.text || 'Item', {
-              x: 8.2, y: checkY, w: 1.5, h: 0.3,
-              fontSize: 6, color: validateColor('333333'), fontFace: 'Lato',
-              align: 'left', valign: 'middle'
+              x: 7.9, y: checkY, w: 1.9, h: 0.25,
+              fontSize: 7, color: validateColor('333333'), fontFace: 'Lato',
+              align: 'left', valign: 'middle', wrap: true
             });
 
-            checkY += 0.4;
+            checkY += 0.35;
           }
         }
 
@@ -1533,11 +1643,13 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           fill: { color: '28295D' }
         });
 
-        // Textbox title
-        slide.addText(slideData.title || 'Slide Title', {
+        // Textbox title with dynamic font
+        const textboxTitle = slideData.title || 'Slide Title';
+        const headerFontSize = getHeaderFontSize(textboxTitle);
+        slide.addText(textboxTitle, {
           x: 0.5, y: 0.15, w: 7, h: 0.8,
-          fontSize: 28, color: validateColor('FFFFFF'), fontFace: 'Lato',
-          align: 'left', bold: false, valign: 'middle'
+          fontSize: headerFontSize, color: validateColor('FFFFFF'), fontFace: 'Lato',
+          align: 'left', bold: false, valign: 'middle', wrap: true
         });
 
         // Add brand logo in header (2:1 aspect ratio)
