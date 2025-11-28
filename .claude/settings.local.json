@@ -3,7 +3,14 @@
     "allow": [
       "Bash(npm install:*)",
       "Bash(git push:*)",
-      "Bash(git branch:*)"
+      "Bash(git branch:*)",
+      "Bash(cat:*)",
+      "Bash(npm info:*)",
+      "Bash(node:*)",
+      "Bash(unzip:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []

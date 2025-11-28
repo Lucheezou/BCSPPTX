@@ -764,16 +764,6 @@ ${combinedSlides}
     await fs.ensureDir(path.join('public', 'previews'));
     await fs.writeFile(previewPath, finalHtml);
 
-    // Extract slides for preview in frontend
-    let extractedSlides = [];
-    try {
-      extractedSlides = await extractContentWithAI(finalHtml);
-      console.log(`📊 Extracted ${extractedSlides.length} slides for preview`);
-    } catch (error) {
-      console.error('Error extracting slides for preview:', error);
-      // Continue without extracted slides data
-    }
-
     res.json({
       success: true,
       html: finalHtml,
@@ -781,8 +771,7 @@ ${combinedSlides}
       chunksProcessed: allSlides.length,
       previewUrl: `/previews/${previewFilename}`,
       presentationId: timestamp,
-      classificationResults: classificationResults, // Pass classification data to client
-      slides: extractedSlides // Pass extracted slide data for frontend preview
+      classificationResults: classificationResults // Pass classification data to client
     });
 
   } catch (error) {
@@ -1230,9 +1219,6 @@ CHECKLIST MODE:
 CRITICAL EXTRACTION RULES:
 - Extract actual content, NOT placeholder text
 - For briefing_header: Always format as "BCS Monthly Briefing: [Month Day, Year]" with current date
-- PRESERVE NUMERIC FORMATTING: Keep all numbers as digits (71, 2023, 2026, 15, etc.)
-- DO NOT spell out numbers: Use "Part 71" NOT "Part Seventy One", "2023" NOT "twenty three", "October 15" NOT "October Fifteen"
-- Examples: "ACA FAQ Part 71", "Medicare notices due October 15", "2023 regulations"
 
 BULLET FORMATTING (MANDATORY - NESTED LIST DETECTION):
 - ALWAYS preserve bullet hierarchies from nested <ul> lists in HTML
@@ -1257,11 +1243,6 @@ AGENDA FORMATTING (CRITICAL - MANDATORY):
 - The two-space prefix "  " is REQUIRED for proper PPT indentation
 
 SLIDE TYPE DETECTION:
-- **Question of the Month slides** (HIGHEST PRIORITY) - MUST use type: "qotm":
-  * Appears after "Question of the Month" transition slide
-  * Title starts with "Question:" or contains "court orders", "legal changes", or "benefits eligibility"
-  * Content has 3 sections: scenario, what the rule says, what employers should do
-  * DO NOT use "textbox" type for Question of the Month - ALWAYS use "qotm"
 - "Go Deeper" in title or heading → type: "go_deeper"
 - "Employer Implications" or "Takeaways" in title → type: "checklist" (sidebar format)
 - "Implications" or "Action Items" in title → type: "checklist" (sidebar format)
@@ -1271,19 +1252,6 @@ SLIDE TYPE DETECTION:
 - Transition headers for "Federal Update" or "Question of the Month" → type: "transition_alt"
 - Other transition headers → type: "transition"
 - NEVER create type: "statistics" (excluded by default)
-
-MULTI-SLIDE ARTICLE TITLE CONSISTENCY (CRITICAL):
-- When an article spans multiple slides (e.g., "Overview" + "Employer Actions" for CRITICAL articles), use CONSISTENT BASE TITLES
-- Format: "[Base Article Title] - [Suffix]"
-- Example for 2-slide article:
-  * Slide 1: "Contraceptive Mandate Exemptions - Overview"
-  * Slide 2: "Contraceptive Mandate Exemptions - Employer Actions"
-- The base title MUST be IDENTICAL for all slides in the same article
-- Common suffixes: "Overview", "Go Deeper", "Employer Actions", "Key Points", "Background", "Next Steps"
-- DO NOT use shortened or different base titles like:
-  * BAD: "Contraceptive Mandate Exemptions Vacated" + "Contraceptive Mandate: employer actions"
-  * GOOD: "Contraceptive Mandate Exemptions" + "Contraceptive Mandate Exemptions - Employer Actions"
-- This consistency is REQUIRED for proper article grouping and merging functionality
 
 SPEAKER NOTES EXTRACTION (CRITICAL - MANDATORY):
 - ALWAYS look for hidden notes sections that appear IMMEDIATELY AFTER each slide
@@ -1322,17 +1290,7 @@ OTHER RULES:
 - IMPORTANT: Employer implications should ALWAYS be type: "checklist" (not textbox)
 - Identify article categories and use appropriate transition slide types
 - Convert HTML entities to proper text
-
-CRITICAL JSON FORMATTING RULES:
-- Return ONLY valid JSON, no explanations or markdown
-- All string values must be properly escaped (use \\" for quotes inside strings)
-- All object properties must end with commas EXCEPT the last property in each object
-- All array items must end with commas EXCEPT the last item
-- Ensure all brackets and braces are properly closed
-- Do NOT include any text before or after the JSON object
-- Start your response with { and end with }
-- Test that commas are placed correctly: property: value, NOT property: value
-- Each slide object in the "slides" array must be valid JSON`;
+- Return ONLY valid JSON, no explanations or markdown`;
 
     const completion = await openai.responses.create({
       model: "gpt-5",
@@ -1344,16 +1302,8 @@ CRITICAL JSON FORMATTING RULES:
     const response = completion.output_text.trim();
     console.log('AI response:', response.substring(0, 300));
 
-    // Clean and parse JSON response with better error handling
-    let cleanResponse = response.replace(/```json\s*/g, '').replace(/```\s*$/g, '').trim();
-
-    // Remove any text before the first { or after the last }
-    const firstBrace = cleanResponse.indexOf('{');
-    const lastBrace = cleanResponse.lastIndexOf('}');
-    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-      cleanResponse = cleanResponse.substring(firstBrace, lastBrace + 1);
-    }
-
+    // Clean and parse JSON response
+    const cleanResponse = response.replace(/```json\s*/g, '').replace(/```\s*$/g, '').trim();
     const extractedData = JSON.parse(cleanResponse);
 
     // Clean up text content to fix encoding issues and validate colors
@@ -1670,214 +1620,16 @@ function parseHtmlSlides(html) {
   return parseHtmlSlidesRegex(html);
 }
 
-// ===== REGENERATION OPTION FUNCTIONS =====
-
-// Collapse specific slides by indices: merge slides marked by user
-function collapseSpecificSlides(slides, indicesToCollapse) {
-  if (!indicesToCollapse || indicesToCollapse.length === 0) {
-    return slides;
-  }
-
-  const result = [];
-  const collapseSet = new Set(indicesToCollapse);
-  let slideGroup = [];
-  let i = 0;
-
-  while (i < slides.length) {
-    const slide = slides[i];
-
-    // Always keep structural slides (title, agenda, transition, thankyou)
-    if (['title', 'agenda', 'transition', 'transition_alt', 'thankyou'].includes(slide.type)) {
-      // Flush any pending group
-      if (slideGroup.length > 0) {
-        result.push(mergeSlides(slideGroup));
-        slideGroup = [];
-      }
-      result.push(slide);
-      i++;
-    } else if (collapseSet.has(i)) {
-      // This slide is marked for collapse - start/continue grouping
-      slideGroup.push(slide);
-      i++;
-
-      // Look ahead: if next slide is not marked or is structural, merge the group
-      const nextSlide = slides[i];
-      if (!nextSlide ||
-          !collapseSet.has(i) ||
-          ['title', 'agenda', 'transition', 'transition_alt', 'thankyou'].includes(nextSlide?.type)) {
-        if (slideGroup.length > 0) {
-          result.push(mergeSlides(slideGroup));
-          slideGroup = [];
-        }
-      }
-    } else {
-      // Not marked for collapse - add as-is
-      if (slideGroup.length > 0) {
-        result.push(mergeSlides(slideGroup));
-        slideGroup = [];
-      }
-      result.push(slide);
-      i++;
-    }
-  }
-
-  // Flush any remaining group
-  if (slideGroup.length > 0) {
-    result.push(mergeSlides(slideGroup));
-  }
-
-  console.log(`   🔧 slides_to_collapse (${indicesToCollapse.length} slides marked): ${slides.length} → ${result.length} slides`);
-  return result;
-}
-
-// Merge multiple slides into one
-function mergeSlides(slides) {
-  if (slides.length === 1) return slides[0];
-
-  const merged = {
-    ...slides[0],
-    content: [],
-    notes: ''
-  };
-
-  // Section heading patterns (same as in PPT rendering)
-  const sectionHeadingPatterns = [
-    /^Background and Timeline/i,
-    /^What is changing and why/i,
-    /^What changed/i,
-    /^What's next/i,
-    /^Key Points/i,
-    /^Overview/i,
-    /^Court Decision/i,
-    /^Employer Impact/i,
-    /^What happened/i,
-    /^Timeline/i,
-    /^The Decision/i
-  ];
-
-  const isSectionHeading = (text) => {
-    const trimmed = text.trim();
-    return !trimmed.startsWith('•') && !trimmed.startsWith('-') &&
-           sectionHeadingPatterns.some(pattern => pattern.test(trimmed));
-  };
-
-  // Combine content from all slides, removing empty sections
-  const allContent = [];
-  for (const slide of slides) {
-    if (slide.content && Array.isArray(slide.content)) {
-      allContent.push(...slide.content);
-    }
-    if (slide.notes) {
-      merged.notes += (merged.notes ? '\n\n' : '') + slide.notes;
-    }
-  }
-
-  // Filter out section headings that have no bullets underneath them
-  const filteredContent = [];
-  for (let i = 0; i < allContent.length; i++) {
-    const item = allContent[i];
-    const isHeading = isSectionHeading(item);
-
-    if (isHeading) {
-      // Check if there's at least one bullet following this heading
-      const hasFollowingBullets = i + 1 < allContent.length &&
-                                  !isSectionHeading(allContent[i + 1]);
-      if (hasFollowingBullets) {
-        filteredContent.push(item);
-      }
-      // Skip headings with no following content
-    } else {
-      filteredContent.push(item);
-    }
-  }
-
-  // Limit to first 5 bullet points (not counting headings) to avoid overflow
-  let bulletCount = 0;
-  for (let i = 0; i < filteredContent.length; i++) {
-    if (!isSectionHeading(filteredContent[i])) {
-      bulletCount++;
-      if (bulletCount > 5) {
-        merged.content = filteredContent.slice(0, i);
-        return merged;
-      }
-    }
-  }
-
-  merged.content = filteredContent;
-  return merged;
-}
-
-// Filter slides by section
-function filterBySection(slides, sectionName) {
-  let inSection = false;
-  const result = [];
-
-  // Always keep title and agenda
-  for (const slide of slides) {
-    if (slide.type === 'title' || slide.type === 'agenda') {
-      result.push(slide);
-      continue;
-    }
-
-    // Check for section transitions
-    if (slide.type === 'transition' || slide.type === 'transition_alt') {
-      const title = (slide.title || '').toLowerCase();
-      const filter = sectionName.toLowerCase();
-
-      if (title.includes(filter)) {
-        inSection = true;
-        result.push(slide);
-      } else {
-        inSection = false;
-      }
-    } else if (inSection) {
-      result.push(slide);
-    }
-  }
-
-  // Always add thank you slide at the end
-  const thankYouSlide = slides.find(s => s.type === 'thankyou');
-  if (thankYouSlide && !result.includes(thankYouSlide)) {
-    result.push(thankYouSlide);
-  }
-
-  console.log(`   🔧 section_filter (${sectionName}): ${slides.length} → ${result.length} slides`);
-  return result;
-}
-
-// Apply checklist style option to all checklist slides
-function applyChecklistStyle(slides, style) {
-  if (!style || style === 'default') return slides;
-
-  const shouldBeChecked = style === 'all_checked';
-  let modifiedCount = 0;
-
-  for (const slide of slides) {
-    if (slide.type === 'checklist' && slide.checklist_items && Array.isArray(slide.checklist_items)) {
-      for (const item of slide.checklist_items) {
-        item.checked = shouldBeChecked;
-      }
-      modifiedCount++;
-    }
-  }
-
-  console.log(`   🔧 checklist_style (${style}): Modified ${modifiedCount} checklist slides`);
-  return slides;
-}
-
 // PPT conversion endpoint using improved HTML processing
 app.post('/convert-to-ppt', express.json(), async (req, res) => {
   try {
-    const { presentationId, html, classificationResults, options = {} } = req.body;
+    const { presentationId, html, classificationResults } = req.body;
 
     if (!html) {
       return res.status(400).json({ error: 'No HTML content provided' });
     }
 
     console.log('Converting HTML to PPT using enhanced processing...');
-    if (Object.keys(options).length > 0) {
-      console.log('📝 Regeneration options:', options);
-    }
 
     // Create PowerPoint presentation
     const pptx = new PptxGenJS();
@@ -1904,22 +1656,6 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
       console.log(`✅ Slide count validation: ${slides.length} → ${validatedSlides.length} slides after enforcement`);
     } else {
       console.log('ℹ️ No classification data provided - skipping slide count enforcement');
-    }
-
-    // ===== APPLY REGENERATION OPTIONS =====
-    if (options.slides_to_collapse && options.slides_to_collapse.length > 0) {
-      console.log('🔧 Applying per-slide collapse...');
-      validatedSlides = collapseSpecificSlides(validatedSlides, options.slides_to_collapse);
-    }
-
-    if (options.section_filter) {
-      console.log(`🔧 Filtering by section: ${options.section_filter}`);
-      validatedSlides = filterBySection(validatedSlides, options.section_filter);
-    }
-
-    if (options.checklist_style) {
-      console.log(`🔧 Applying checklist style: ${options.checklist_style}`);
-      validatedSlides = applyChecklistStyle(validatedSlides, options.checklist_style);
     }
 
     // Process each slide using improved extraction
@@ -2594,45 +2330,25 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
         if (slideData.content && slideData.content.length > 0) {
           const safeChecklist = Array.isArray(slideData.content) ? slideData.content : [slideData.content];
 
-          // Section heading patterns (same as content slides)
-          const sectionHeadingPatterns = [
-            /^What's next/i,
-            /^Employer Steps/i,
-            /^Next Steps/i,
-            /^Action Items/i,
-            /^Key Points/i,
-            /^Takeaways/i,
-            /^Background/i
-          ];
+          // Process content to ensure bullets are present
+          const bulletContent = safeChecklist.map(item => {
+            const trimmed = item.trim();
+            // Remove existing bullet/number if present
+            const cleaned = trimmed.replace(/^[\d\)•◦\-]\s*/, '');
+            return cleaned;
+          });
 
-          const isSectionHeading = (text) => {
-            const trimmed = text.trim();
-            return !trimmed.startsWith('•') && !trimmed.startsWith('-') &&
-                   sectionHeadingPatterns.some(pattern => pattern.test(trimmed));
-          };
-
-          // Filter out section headings from content (they shouldn't be bullets)
-          const bulletContent = safeChecklist
-            .map(item => {
-              const trimmed = item.trim();
-              // Remove existing bullet/number if present
-              const cleaned = trimmed.replace(/^[\d\)•◦\-]\s*/, '');
-              return cleaned;
-            })
-            .filter(item => !isSectionHeading(item)); // Remove section headings
-
-          // Limit number of bullet items instead of character count to avoid mid-sentence truncation
-          const maxBullets = 6; // Fits comfortably in the content area
-          const limitedContent = bulletContent.slice(0, maxBullets);
-          const contentText = limitedContent.join('\n');
+          const contentText = bulletContent.join('\n');
+          // Truncate if too long to prevent overflow
+          const maxLength = 500;
+          const displayText = contentText.length > maxLength ? contentText.substring(0, maxLength) + '...' : contentText;
 
           const contentHeight = 5.1 - contentStartY - 0.3;
-          slide.addText(contentText, {
+          slide.addText(displayText, {
             x: 0.5, y: contentStartY, w: 6.7, h: contentHeight,
             fontSize: 14, color: validateColor('FFFFFF'), fontFace: 'Lato',
             align: 'left', valign: 'top', wrap: true, lineSpacing: 18,
-            bullet: true,  // Add bullets to checklist content
-            shrinkText: true  // Auto-shrink if content is too large
+            bullet: true  // Add bullets to checklist content
           });
         }
 
@@ -2846,38 +2562,29 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           x: 8.5, y: 0.2, w: 1.2, h: 0.6
         });
 
-        // Limit bullets per section to prevent overflow
-        const maxBulletsPerSection = 3;
-        const limitedScenario = (slideData.scenario || []).slice(0, maxBulletsPerSection);
-        const limitedRule = (slideData.rule || []).slice(0, maxBulletsPerSection);
-        const limitedAction = (slideData.action || []).slice(0, maxBulletsPerSection);
-
-        // Dynamic sizing for QotM based on total content - very aggressive scaling
-        const totalBullets = limitedScenario.length + limitedRule.length + limitedAction.length;
-        let bulletFontSize = 12;
-        let bulletHeight = 0.35;
-        let bulletSpacing = 0.38;
-        let sectionHeaderFontSize = 13;
-        let sectionSpacing = 0.08; // Space between sections
+        // Dynamic sizing for QotM based on total content
+        const totalBullets = (slideData.scenario?.length || 0) + (slideData.rule?.length || 0) + (slideData.action?.length || 0);
+        let bulletFontSize = 13;
+        let bulletHeight = 0.4;
+        let bulletSpacing = 0.45;
+        let sectionHeaderFontSize = 14;
 
         if (totalBullets > 7) {
-          bulletFontSize = 10;
-          bulletHeight = 0.28;
-          bulletSpacing = 0.3;
-          sectionHeaderFontSize = 11;
-          sectionSpacing = 0.05;
-        } else if (totalBullets > 5) {
           bulletFontSize = 11;
-          bulletHeight = 0.3;
-          bulletSpacing = 0.33;
+          bulletHeight = 0.35;
+          bulletSpacing = 0.38;
           sectionHeaderFontSize = 12;
-          sectionSpacing = 0.06;
+        } else if (totalBullets > 5) {
+          bulletFontSize = 12;
+          bulletHeight = 0.38;
+          bulletSpacing = 0.42;
+          sectionHeaderFontSize = 13;
         }
 
-        let yPos = 1.25; // Start even higher
+        let yPos = 1.4;
 
         // Scenario section
-        if (limitedScenario.length > 0) {
+        if (slideData.scenario && slideData.scenario.length > 0) {
           slide.addShape(pptx.ShapeType.rect, {
             x: 0.6, y: yPos, w: 8.8, h: 0.4,
             fill: { color: 'A8D5D5' }
@@ -2889,7 +2596,7 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           });
           yPos += 0.5;
 
-          for (const bullet of limitedScenario) {
+          for (const bullet of slideData.scenario.slice(0, 3)) {
             slide.addText('•', {
               x: 0.8, y: yPos, w: 0.2, h: 0.25,
               fontSize: bulletFontSize, color: validateColor('333333'), fontFace: 'Lato',
@@ -2905,8 +2612,8 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
         }
 
         // What the rule says section
-        if (limitedRule.length > 0) {
-          yPos += sectionSpacing;
+        if (slideData.rule && slideData.rule.length > 0) {
+          yPos += 0.1;
           slide.addShape(pptx.ShapeType.rect, {
             x: 0.6, y: yPos, w: 8.8, h: 0.4,
             fill: { color: 'E8E8E8' }
@@ -2918,7 +2625,7 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           });
           yPos += 0.5;
 
-          for (const bullet of limitedRule) {
+          for (const bullet of slideData.rule.slice(0, 3)) {
             slide.addText('•', {
               x: 0.8, y: yPos, w: 0.2, h: 0.25,
               fontSize: bulletFontSize, color: validateColor('333333'), fontFace: 'Lato',
@@ -2934,8 +2641,8 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
         }
 
         // What employers should do section
-        if (limitedAction.length > 0) {
-          yPos += sectionSpacing;
+        if (slideData.action && slideData.action.length > 0) {
+          yPos += 0.1;
           slide.addShape(pptx.ShapeType.rect, {
             x: 0.6, y: yPos, w: 8.8, h: 0.4,
             fill: { color: 'A8D5D5' }
@@ -2947,7 +2654,7 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           });
           yPos += 0.5;
 
-          for (const bullet of limitedAction) {
+          for (const bullet of slideData.action.slice(0, 3)) {
             slide.addText('•', {
               x: 0.8, y: yPos, w: 0.2, h: 0.25,
               fontSize: bulletFontSize, color: validateColor('333333'), fontFace: 'Lato',
