@@ -1124,6 +1124,14 @@ async function extractContentWithAI(html) {
 
     const prompt = `Analyze this HTML presentation content and extract the structured data for PowerPoint conversion. The HTML contains various component types that the AI dynamically selected.
 
+⚠️ CRITICAL RULES - READ FIRST:
+1. DO NOT HALLUCINATE - Extract ONLY what is actually written in the HTML document
+2. NEVER SPELL OUT NUMBERS - Keep ALL numbers as digits (25, 71, 2023, etc.)
+   - WRONG: "June twenty five" → CORRECT: "June 25"
+   - WRONG: "Part Seventy One" → CORRECT: "Part 71"
+3. DO NOT add sections like "Hot Topics", "In the News" if they don't exist in the document
+4. Use EXACT section names from document (e.g., "ANNOUNCEMENTS", "WORKSHOPS")
+
 HTML Content:
 """
 ${cleanedHtml}
@@ -1222,17 +1230,28 @@ Component Detection Rules:
 
 IMPORTANT: Employer Implications should ALWAYS use div.checklist-slide (sidebar format), NOT textbox
 
-CHECKLIST MODE:
-- All checklist items should have "checked": false by default (empty checkboxes)
-- This creates an interactive checklist for users to check off items
-- DO NOT pre-check items unless explicitly marked as examples
+CHECKLIST MODE (CRITICAL - MANDATORY):
+- ALWAYS set "checked": false for ALL checklist items (empty checkboxes)
+- NEVER mix checked and unchecked items - ALL must be false
+- DO NOT pre-check any items - users will check them during presentation
+- Example: [{"text": "Review plan", "checked": false}, {"text": "Update policy", "checked": false}]
 
-CRITICAL EXTRACTION RULES:
-- Extract actual content, NOT placeholder text
+CRITICAL EXTRACTION RULES (DO NOT HALLUCINATE):
+- Extract ONLY content that actually exists in the document
+- DO NOT add sections like "Hot Topics", "In the News", "Federal Updates" if they are not present in the document
+- DO NOT invent or create content - extract only what is written
+- If document has "ANNOUNCEMENTS", "WORKSHOPS", "REMINDERS" - use those exact section names
 - For briefing_header: Always format as "BCS Monthly Briefing: [Month Day, Year]" with current date
-- PRESERVE NUMERIC FORMATTING: Keep all numbers as digits (71, 2023, 2026, 15, etc.)
-- DO NOT spell out numbers: Use "Part 71" NOT "Part Seventy One", "2023" NOT "twenty three", "October 15" NOT "October Fifteen"
-- Examples: "ACA FAQ Part 71", "Medicare notices due October 15", "2023 regulations"
+
+NUMERIC FORMATTING (CRITICAL - NEVER SPELL OUT NUMBERS):
+- ALWAYS keep numbers as digits: 1, 2, 3, 15, 25, 71, 2023, 2024, 2025, 2026
+- NEVER convert numbers to words
+- Examples:
+  * CORRECT: "June 25 Affordable Care Act rule"
+  * WRONG: "June twenty five Affordable Care Act rule"
+  * CORRECT: "Part 71", "2023 regulations", "October 15 deadline"
+  * WRONG: "Part Seventy One", "twenty twenty three regulations", "October Fifteen deadline"
+- This applies to ALL numbers: dates, parts, years, amounts, etc.
 
 BULLET FORMATTING (MANDATORY - NESTED LIST DETECTION):
 - ALWAYS preserve bullet hierarchies from nested <ul> lists in HTML
@@ -1244,15 +1263,17 @@ BULLET FORMATTING (MANDATORY - NESTED LIST DETECTION):
 - Parent bullets have NO prefix at all
 
 AGENDA FORMATTING (CRITICAL - MANDATORY):
+- Extract agenda items ONLY from sections that actually exist in the document
+- DO NOT add "Hot Topics", "In the News", "Federal Updates" unless they appear in the document
+- Use the ACTUAL section names from the document (e.g., "ANNOUNCEMENTS", "WORKSHOPS", "REMINDERS")
 - MUST preserve hierarchical structure with TWO-SPACE indentation for nested items
-- For items like "Hot Topics: Title" followed by nested items:
-  * Extract parent as just the category: "Hot Topics"
-  * Extract nested item with TWO SPACES: "  1094/1095 IRS e-filing..."
-- Main items: NO spaces at start, e.g., "In the News"
+- For items like "ANNOUNCEMENTS: New Team Member" followed by nested items:
+  * Extract parent as just the category: "ANNOUNCEMENTS"
+  * Extract nested item with TWO SPACES: "  New Team Member"
+- Main items: NO spaces at start, e.g., "ANNOUNCEMENTS"
 - Sub-items: EXACTLY TWO SPACES at start, e.g., "  Sub-topic"
 - Detect nested items: <li class="agenda-item nested"> has class "nested"
 - If an item has a colon and is followed by a nested item, split at colon and use first part as parent
-- Extract format: ["In the News", "Hot Topics", "  ACA Reporting Deadlines", "Federal Update"]
 - DO NOT trim() or strip() leading spaces from sub-items
 - The two-space prefix "  " is REQUIRED for proper PPT indentation
 
@@ -1752,7 +1773,10 @@ function mergeSlides(slides) {
     /^Employer Impact/i,
     /^What happened/i,
     /^Timeline/i,
-    /^The Decision/i
+    /^The Decision/i,
+    /^Who is impacted/i,
+    /^Who does this impact/i,
+    /^Who does this apply to/i
   ];
 
   const isSectionHeading = (text) => {
@@ -2002,20 +2026,24 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
         const totalItems = slideData.items.length;
         const maxItems = Math.min(totalItems, 15); // Allow up to 15 items
 
-        // Dynamic font sizing and spacing based on item count
+        // Calculate average item length to detect long titles
+        const avgItemLength = slideData.items.slice(0, maxItems).reduce((sum, item) => sum + item.length, 0) / maxItems;
+        const hasLongItems = avgItemLength > 40;
+
+        // Dynamic font sizing and spacing based on item count AND item length
         let baseFontSize = 15;
         let subFontSize = 13;
         let checkFontSize = 18;
         let baseLineHeight = 0.5;
         let lineSpacing = 16;
 
-        if (totalItems > 12) {
+        if (totalItems > 12 || (totalItems > 8 && hasLongItems)) {
           baseFontSize = 12;
           subFontSize = 11;
           checkFontSize = 14;
           baseLineHeight = 0.38;
           lineSpacing = 14;
-        } else if (totalItems > 10) {
+        } else if (totalItems > 10 || hasLongItems) {
           baseFontSize = 13;
           subFontSize = 12;
           checkFontSize = 16;
@@ -2110,6 +2138,8 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
         // Add bullets directly - calculate height based on text length for wrapping
         let yPos = 1.5;
         const maxYPos = 5.0; // Don't go below this
+        let bulletCount = 0;
+        const maxBullets = 5; // Hard limit: max 5 bullet points per slide (not counting section headings)
 
         for (let j = 0; j < safeContent.length && yPos < maxYPos; j++) {
           const item = safeContent[j];
@@ -2127,7 +2157,10 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
             /^Employer Impact/i,
             /^What happened/i,
             /^Timeline/i,
-            /^The Decision/i
+            /^The Decision/i,
+            /^Who is impacted/i,
+            /^Who does this impact/i,
+            /^Who does this apply to/i
           ];
           const isSectionHeading = !trimmed.startsWith('•') && !trimmed.startsWith('-') &&
                                    sectionHeadingPatterns.some(pattern => pattern.test(trimmed));
@@ -2148,6 +2181,10 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
             yPos += headingHeight + 0.15; // Space after heading
           } else {
             // Regular bullet point
+
+            // Enforce max bullet limit (not counting section headings)
+            if (bulletCount >= maxBullets) break;
+
             const text = trimmed.startsWith('•') || trimmed.startsWith('-') ? trimmed.substring(1).trim() : trimmed;
             const indent = isSubBullet ? 0.4 : 0;
             const bulletSymbol = '•'; // Always use solid bullet for both main and sub-bullets
@@ -2179,6 +2216,7 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
             });
 
             yPos += itemHeight + 0.05;
+            bulletCount++; // Increment bullet counter
           }
         }
 
@@ -2598,6 +2636,7 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           const sectionHeadingPatterns = [
             /^What's next/i,
             /^Employer Steps/i,
+            /^Employer Action Steps/i,
             /^Next Steps/i,
             /^Action Items/i,
             /^Key Points/i,
@@ -2642,16 +2681,26 @@ app.post('/convert-to-ppt', express.json(), async (req, res) => {
           fill: { color: 'FFFFFF' }
         });
 
-        let checkY = 1.3;
+        let checkY = 1.25; // Reduced from 1.3 to minimize space between title and items
 
-        // Add brief paragraph before checklist if present
-        if (slideData.checklist_panel_text) {
-          slide.addText(slideData.checklist_panel_text, {
-            x: 7.6, y: checkY, w: 2.3, h: 1.0,
+        // Add brief paragraph before checklist if present (only if text exists)
+        if (slideData.checklist_panel_text && slideData.checklist_panel_text.trim().length > 0) {
+          const panelText = slideData.checklist_panel_text.trim();
+
+          // Calculate height based on text length to prevent overlap
+          // Conservative estimate: 2.3" width, 8pt font, ~35 chars per line (accounting for wrapping)
+          const charsPerLine = 35; // More conservative to account for word wrapping
+          const numLines = Math.ceil(panelText.length / charsPerLine);
+          const lineHeight = 0.18; // Height per line at font size 8 with line spacing
+          const calculatedHeight = Math.min(numLines * lineHeight, 1.5); // Cap at 1.5 inches
+
+          slide.addText(panelText, {
+            x: 7.6, y: checkY, w: 2.3, h: calculatedHeight,
             fontSize: 8, color: validateColor('333333'), fontFace: 'Lato',
-            align: 'left', valign: 'top', wrap: true, lineSpacing: 12
+            align: 'left', valign: 'top', wrap: true, lineSpacing: 12,
+            shrinkText: true // Auto-shrink if still too large
           });
-          checkY += 1.1; // Move down after paragraph
+          checkY += calculatedHeight + 0.15; // Add height plus slightly larger gap for safety
         }
 
         // Checklist items
